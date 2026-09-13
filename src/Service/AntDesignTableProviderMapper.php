@@ -27,7 +27,10 @@ final readonly class AntDesignTableProviderMapper implements TableProviderMapper
                 'hideInTable' => !$column->visible,
                 'search' => $column->filterable || $column->searchable,
             ], $definition->columns),
-            'actions' => $definition->actions,
+            'actions' => array_map(
+                fn ($action): array => (new TableActionMetadataBuilder())->build($action),
+                $definition->actions,
+            ),
             'meta' => $definition->meta,
         ];
     }
