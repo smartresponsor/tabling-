@@ -33,11 +33,11 @@
 
 - Reviewed the final diff for responsibility leakage: no CRUD execution, query execution, JavaScript provider implementation, or new cross-component runtime dependency was introduced.
 - Pre-existing untracked `.gating/` remains intentionally outside the owned change set.
-- Git integration pending commit/push evidence below.
+- Implementation commit was created and pushed to the configured `origin/backend-table-actions` upstream; unrelated `.gating/` content was preserved and excluded.
 
 ### Iteration 5 — final acceptance and handoff
 
 - RC-critical implementation and local verification are green.
 - Remaining post-RC growth stays explicitly out of scope: richer faceting/filter contracts, saved/personalized views, capability negotiation, and server-side grid protocol metadata.
-- Final Git/remote state is recorded after integration.
+- Branch upstream is synchronized. PR creation was attempted against `master` and `main`, but neither exists as a valid base ref for this remote, so no PR/merge was performed.
 
