@@ -27,7 +27,10 @@ final readonly class PrimeReactTableProviderMapper implements TableProviderMappe
                 'filter' => $column->filterable,
                 'hidden' => !$column->visible,
             ], $definition->columns),
-            'actions' => $definition->actions,
+            'actions' => array_map(
+                fn ($action): array => (new TableActionMetadataBuilder())->build($action),
+                $definition->actions,
+            ),
             'meta' => $definition->meta,
         ];
     }
