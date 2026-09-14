@@ -32,4 +32,20 @@ final class TableMetadataBuilderTest extends TestCase
         self::assertSame('status', $filters[1]['nameEntity']);
         self::assertSame('select', $filters[1]['type']);
     }
+
+    public function testHandlesEmptyRowsAndHumanizesAdditionalColumns(): void
+    {
+        $builder = new TableColumnMetadataBuilder();
+
+        self::assertCount(5, $builder->build([], 'Users'));
+
+        $columns = $builder->build([
+            ['id' => 1, 'title' => 'A', 'display_name' => 'Alpha', 'external-code' => 'EXT'],
+        ], 'Users');
+
+        self::assertSame('display_name', $columns[5]['key']);
+        self::assertSame('Display name', $columns[5]['label']);
+        self::assertSame('external-code', $columns[6]['key']);
+        self::assertSame('External code', $columns[6]['label']);
+    }
 }

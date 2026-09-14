@@ -29,4 +29,25 @@ final class TableActionMetadataBuilderTest extends TestCase
         self::assertSame('/items/delete/42', $metadata['href']);
         self::assertSame('DELETE', $metadata['permission']);
     }
+
+    public function testBuildsPrimaryDisabledActionMetadata(): void
+    {
+        $action = new TableActionDTO(
+            'new',
+            'Create',
+            'crud_new',
+            [],
+            null,
+            'table',
+            false,
+            false,
+        );
+
+        $metadata = (new TableActionMetadataBuilder())->build($action);
+
+        self::assertSame('primary', $metadata['variant']);
+        self::assertSame('disabled', $metadata['visibility']);
+        self::assertFalse($metadata['enabled']);
+        self::assertNull($metadata['href']);
+    }
 }

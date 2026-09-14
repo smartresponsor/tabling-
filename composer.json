@@ -6,7 +6,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "collectioning/collection": "dev-main || dev-master",
+    "collectioning/collection": "dev-master",
     "php": "^8.4",
     "symfony/dependency-injection": "^8.1",
     "symfony/framework-bundle": "^8.1",
@@ -18,7 +18,10 @@
       "type": "path",
       "url": "../Collectioning",
       "options": {
-        "symlink": true
+        "symlink": true,
+        "versions": {
+          "collectioning/collection": "dev-master"
+        }
       }
     }
   ],
@@ -39,8 +42,20 @@
   },
   "scripts": {
     "test": "phpunit tests",
-    "phpstan": "phpstan analyse src tests --level=8",
+    "test:coverage": [
+      "@php -r \"if (!is_dir('var/coverage')) { mkdir('var/coverage', 0777, true); }\"",
+      "@php -d xdebug.mode=coverage vendor/bin/phpunit --branch-coverage --coverage-text=var/coverage/summary.txt"
+    ],
+    "validate:prod": "composer validate --strict --no-check-all composer.prod.json",
+    "phpstan": "phpstan analyse -c phpstan.neon",
     "cs:check": "php-cs-fixer fix --dry-run --diff",
-    "cs:fix": "php-cs-fixer fix"
+    "cs:fix": "php-cs-fixer fix",
+    "quality": [
+      "@test",
+      "@test:coverage",
+      "@phpstan",
+      "@cs:check",
+      "@validate:prod"
+    ]
   }
 }

@@ -43,4 +43,44 @@
 - PR #3 (`backend-table-actions` → `initial-platform-primitive`) was created, inspected as mergeable with no merge-gate blockers, and squash-merged.
 - Local `initial-platform-primitive` was fast-forwarded to the merged remote state (`679200172fc8ba224649417eef3c8fd013c06903`).
 - Post-merge acceptance: PHPUnit 4/4 tests with 25 assertions; PHPStan level 8 with no errors.
-
+
+## 2026-09-14 — repository implementation / RC package hardening
+
+### Reconnaissance and baseline
+
+- Current workspace: branch `initial-platform-primitive`, baseline HEAD `bc26adf0a9f7a2dbe88b7929ec44338493f47ce4`, upstream `origin/initial-platform-primitive`, ahead/behind `0/0`; pre-existing untracked `.gating/` remains outside the owned change set.
+- Read current `README.md`, `composer.json`, source/services/interfaces/DTOs, unit tests, service configuration, quality scripts and Git state. Root `AGENTS.md` and `MANIFEST.json` are absent.
+- Read the current local contracts for `Collectioning`, `Objecting`, `Cruding`, `Viewing`, and `Interfacing`, plus the authoritative `Canonization` rule texts and the executable `Gating` companion.
+- Canonization rules consulted for this pass: Canon000, Canon001, Canon002, Canon003, Canon012, Canon017, Canon018, Canon021, Canon023, Canon024, Canon029, Canon032, Canon033, Canon034, Canon036, Canon039, Canon040, Canon043 and Canon045.
+- Target-to-canon mapping: `tabling/table` maps to `App\\Tabling\\` and `Table*`; DTOs remain under `src/DTO`, service interfaces under `src/ServiceInterface`, and provider serialization arrays remain an intentional dynamic boundary under Canon012. No `Domain`, Port, Adapter/Adaptor, generic CRUD controller or generic CRUD route surface is introduced.
+- Dependency mapping: `Collectioning` is the direct runtime dependency because `TableDefinitionDTO` embeds `CollectionDefinitionDTO`. `Cruding` already requires `tabling/table`; adding the reverse direct dependency would create a Composer cycle, so Tabling keeps CRUD execution/route ownership outside its package. `Objecting`, `Viewing`, and `Interfacing` have no Tabling-owned runtime imports or contracts in the current tree and are host/application integration dependencies rather than fabricated direct package requirements.
+- Canon045 closure check: current `Collectioning` has no first-party sibling runtime dependency/path-repository closure, so Tabling needs only the direct `../Collectioning` development repository.
+- Market/enterprise baseline: mature grid ecosystems separate table-definition metadata from server-side filtering/sorting/pagination execution. RC therefore focuses on package correctness, typed metadata boundaries and executable quality contracts; growth remains separate.
+- Baseline gates: `composer validate --strict --check-lock` green; PHPUnit 4/4 with 25 assertions green; PHPStan level 8 green; PHP-CS-Fixer dry-run failed on formatting/line-ending normalization.
+
+### RC-critical work selected
+
+- Normalize the local `collectioning/collection` development identity to exact `dev-master` and pin its path repository version per Canon043.
+- Add a path-free `composer.prod.json` with development/production identity parity per Canon024/Canon033.
+- Add repository-owned PHPStan configuration per Canon029.
+- Add repository-owned PHPUnit source/coverage configuration and persistent branch-coverage script per Canon039/Canon040.
+- Normalize source/test formatting through the repository-owned PHP-CS-Fixer configuration, then rerun Composer validation, tests, PHPStan, CS, PHP lint, coverage/Gating where executable, and inspect final Git state.
+
+### Growth workstream (post-RC)
+
+- Keep grouping/aggregation metadata, saved/personalized table views, capability negotiation, richer facet/filter metadata, and additional provider adapters outside the RC gate unless required by a concrete consumer contract.
+
+### Verification and acceptance
+
+- Added `.gitattributes` with a PHP-only LF rule after the baseline demonstrated Windows line-ending drift in the PHP-CS-Fixer gate.
+- Added focused tests for action metadata variants/disabled state, Symfony Security visibility resolution, column metadata edge cases, and `TablingExtension` service loading/alias behavior.
+- PHPUnit: 8/8 tests green with 42 assertions.
+- Coverage evidence: lines 100.00% (89/89), methods 88.23% (15/17), branches 95.55% (43/45); all Canon040 thresholds are satisfied.
+- PHPStan: green with repository-owned level-8 configuration.
+- PHP-CS-Fixer dry-run: green with 0 fixable files.
+- Root Composer validation: `--strict --check-lock` green. Production manifest validation is executable through `validate:prod` and green.
+- `composer audit`: no security vulnerability advisories.
+- Composite `composer quality` is green and runs tests, branch coverage, PHPStan, CS and production-manifest validation.
+- Code Memory graph planning resolved the repo-local project `D-PhpstormProjects-www-Tabling`; the repository does not declare `memory:scope:resolve`, and no graph mutation surface is available in the current execution toolset, so no graph update is claimed.
+- The pre-existing untracked `.gating/` contains a materialized Gating runtime/autoload bridge, but the current safe Console MCP capability set has no arbitrary PHP runner for `.gating/bin/gating`; executable Gating CLI completion is therefore not claimed. Textual Canonization mapping and all repository-owned gates above remain factual.
+- During lock refresh the local `Collectioning` `dev-master` reference advanced while this run was active; the final lock was refreshed against the then-current local `dev-master` and root Composer validation remained green.
