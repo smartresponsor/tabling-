@@ -39,5 +39,8 @@
 
 - RC-critical implementation and local verification are green.
 - Remaining post-RC growth stays explicitly out of scope: richer faceting/filter contracts, saved/personalized views, capability negotiation, and server-side grid protocol metadata.
-- Branch upstream is synchronized. PR creation was attempted against `master` and `main`, but neither exists as a valid base ref for this remote, so no PR/merge was performed.
+- The actual remote integration base was identified as `initial-platform-primitive`.
+- PR #3 (`backend-table-actions` → `initial-platform-primitive`) was created, inspected as mergeable with no merge-gate blockers, and squash-merged.
+- Local `initial-platform-primitive` was fast-forwarded to the merged remote state (`679200172fc8ba224649417eef3c8fd013c06903`).
+- Post-merge acceptance: PHPUnit 4/4 tests with 25 assertions; PHPStan level 8 with no errors.
 
