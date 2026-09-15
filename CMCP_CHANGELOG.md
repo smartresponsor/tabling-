@@ -111,3 +111,11 @@
 - Disallowed provider fields/operators are dropped before query execution. Provider-specific request syntax therefore terminates in Tabling while Collectioning remains the canonical owner of search/filter/sort/projection/pagination execution semantics.
 - Added parity/regression coverage for Ant Design and PrimeReact mapping, including default sort fallback, multi-sort override and rejected non-projectable/non-sortable fields.
 - Final `composer quality` is green: PHPUnit 12/12 with 80 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, production manifest valid. Coverage remains above Canon040 thresholds: lines 94.55% (295/312), methods 71.42% (40/56), branches 81.78% (229/280).
+
+### Saved and personalized view continuation
+
+- Added `TableColumnStateDTO` and `TableViewDTO` for provider-neutral persisted table state: column visibility/order/width/pinning, search, Collectioning filters/sorts, page size, default marker and metadata.
+- Added `TableViewStoreInterface` as a host-owned persistence boundary; Tabling intentionally does not choose Doctrine/Redis/storage ownership for per-user views.
+- Added `TableViewNormalizer` to revalidate persisted state against current table columns and Collectioning field policy, dropping stale/unauthorized filters and sorts, clamping page size, normalizing direction/pinning and minimum widths.
+- Added Ant Design Pro and PrimeReact saved-view mappers so one normalized backend view produces each provider's native column/search/filter/sort state shape.
+- Added regression coverage for stale column rejection, policy enforcement, page-size clamping and provider parity. Final `composer quality` is green: PHPUnit 14/14 with 93 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, production manifest valid. Coverage remains above thresholds: lines 95.66% (397/415), methods 72.13% (44/61), branches 82.30% (293/356).
