@@ -75,6 +75,21 @@ final class TableCollectionQueryMapperTest extends TestCase
         self::assertSame([], $query->filters);
     }
 
+    public function testRejectsUnsupportedExplicitPrimeReactMatchModeInsteadOfReinterpretingIt(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported PrimeReact match mode "contains" for field "status".');
+
+        (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => [
+                'status' => [
+                    'value' => 'active',
+                    'matchMode' => 'contains',
+                ],
+            ],
+        ], $this->table());
+    }
+
     public function testMapsPrimeReactLazyStateAndUsesDefaultSorts(): void
     {
         $table = $this->table();

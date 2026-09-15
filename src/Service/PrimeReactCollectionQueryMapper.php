@@ -37,7 +37,8 @@ final readonly class PrimeReactCollectionQueryMapper
             $operator = match ($matchMode) {
                 'in' => 'in',
                 'equals' => 'eq',
-                default => is_array($value) ? 'in' : 'eq',
+                null => is_array($value) ? 'in' : 'eq',
+                default => throw new \InvalidArgumentException(sprintf('Unsupported PrimeReact match mode "%s" for field "%s".', $matchMode, $field)),
             };
 
             $filters[] = ['field' => $field, 'operator' => $operator, 'value' => $value];
