@@ -37,6 +37,44 @@ final class TableCollectionQueryMapperTest extends TestCase
         self::assertSame(['name', 'status'], $query->fields);
     }
 
+    public function testMapsAntDesignMultiValueFilterWhenCollectionPolicyAllowsInOperator(): void
+    {
+        $query = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => ['status' => ['active', 'pending']],
+        ], $this->table());
+
+        self::assertCount(1, $query->filters);
+        self::assertSame('status', $query->filters[0]->field);
+        self::assertSame('in', $query->filters[0]->operator);
+        self::assertSame(['active', 'pending'], $query->filters[0]->value);
+    }
+
+    public function testMapsPrimeReactInMatchModeWithoutDroppingArrayValue(): void
+    {
+        $query = (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => [
+                'status' => [
+                    'value' => ['active', 'pending'],
+                    'matchMode' => 'in',
+                ],
+            ],
+        ], $this->table());
+
+        self::assertCount(1, $query->filters);
+        self::assertSame('status', $query->filters[0]->field);
+        self::assertSame('in', $query->filters[0]->operator);
+        self::assertSame(['active', 'pending'], $query->filters[0]->value);
+    }
+
+    public function testRejectsProviderMultiValueFilterWhenCollectionPolicyDoesNotAllowInOperator(): void
+    {
+        $query = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => ['name' => ['alice', 'bob']],
+        ], $this->table());
+
+        self::assertSame([], $query->filters);
+    }
+
     public function testMapsPrimeReactLazyStateAndUsesDefaultSorts(): void
     {
         $table = $this->table();
@@ -79,7 +117,7 @@ final class TableCollectionQueryMapperTest extends TestCase
             'users',
             new CollectionDefinitionDTO(\stdClass::class, [
                 new CollectionFieldPolicyDTO('name', searchable: true, sortable: true),
-                new CollectionFieldPolicyDTO('status', filterable: true),
+                new CollectionFieldPolicyDTO('status', filterable: true, filterOperators: ['eq', 'in']),
                 new CollectionFieldPolicyDTO('createdAt', sortable: true),
                 new CollectionFieldPolicyDTO('secret', projectable: false),
             ], 25, 100),

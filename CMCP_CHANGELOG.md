@@ -119,3 +119,13 @@
 - Added `TableViewNormalizer` to revalidate persisted state against current table columns and Collectioning field policy, dropping stale/unauthorized filters and sorts, clamping page size, normalizing direction/pinning and minimum widths.
 - Added Ant Design Pro and PrimeReact saved-view mappers so one normalized backend view produces each provider's native column/search/filter/sort state shape.
 - Added regression coverage for stale column rejection, policy enforcement, page-size clamping and provider parity. Final `composer quality` is green: PHPUnit 14/14 with 93 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, production manifest valid. Coverage remains above thresholds: lines 95.66% (397/415), methods 72.13% (44/61), branches 82.30% (293/356).
+
+### Provider multi-value filter hardening
+
+- Re-read the current Tabling query bridge plus Objecting, Cruding, Viewing, Interfacing, Gating, Collectioning filter policy, and the relevant Canonization rules (Canon001/009/010/018/019/020/022/025/026/032/033/039/041/042).
+- Market baseline confirmed that mature table engines treat controlled filtering state and server-side filtering as first-class capabilities; RC work remains inside Tabling's provider-request translation boundary.
+- RC-critical fix: Ant Design array filters and PrimeReact `in` match-mode arrays are preserved and translated to Collectioning's `in` operator instead of being silently discarded.
+- Collectioning field/operator policy remains authoritative: an `in` filter is emitted only when the table's `CollectionFieldPolicyDTO` allows it; unsupported operators remain rejected in `TableCollectionQueryBuilder`.
+- Added regression tests for Ant Design multi-value filters, PrimeReact `in`, and policy rejection of unauthorized `in` filters.
+- Growth remains separate: broader provider match-mode translation should wait until the corresponding Collectioning operator vocabulary is standardized.
+- No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.

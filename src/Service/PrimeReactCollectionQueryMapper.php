@@ -27,9 +27,20 @@ final readonly class PrimeReactCollectionQueryMapper
                 continue;
             }
             $value = is_array($definition) ? ($definition['value'] ?? null) : $definition;
-            if (null !== $value && !is_array($value)) {
-                $filters[] = ['field' => $field, 'value' => $value];
+            if (null === $value) {
+                continue;
             }
+
+            $matchMode = is_array($definition) && is_string($definition['matchMode'] ?? null)
+                ? $definition['matchMode']
+                : null;
+            $operator = match ($matchMode) {
+                'in' => 'in',
+                'equals' => 'eq',
+                default => is_array($value) ? 'in' : 'eq',
+            };
+
+            $filters[] = ['field' => $field, 'operator' => $operator, 'value' => $value];
         }
 
         $sorts = [];

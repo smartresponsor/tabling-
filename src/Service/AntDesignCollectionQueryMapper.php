@@ -22,10 +22,15 @@ final readonly class AntDesignCollectionQueryMapper
 
         $filters = [];
         foreach (($payload['filters'] ?? []) as $field => $value) {
-            if (!is_string($field) || is_array($value)) {
+            if (!is_string($field) || null === $value) {
                 continue;
             }
-            $filters[] = ['field' => $field, 'value' => $value];
+
+            $filters[] = [
+                'field' => $field,
+                'operator' => is_array($value) ? 'in' : 'eq',
+                'value' => $value,
+            ];
         }
 
         $sorts = [];
