@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tabling\Service;
 
+use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\ServiceInterface\TableProviderMapperInterface;
 
@@ -39,6 +40,11 @@ final readonly class PrimeReactTableProviderMapper implements TableProviderMappe
                 fn ($filter): array => (new TableFilterMetadataBuilder())->metadata($filter),
                 $definition->filters,
             ),
+            'defaultSorts' => array_map(
+                static fn ($sort): array => ['field' => $sort->field, 'direction' => $sort->direction],
+                $definition->defaultSorts,
+            ),
+            'capabilities' => ($definition->capabilities ?? new TableCapabilitiesDTO())->toArray(),
             'meta' => $definition->meta,
         ];
     }

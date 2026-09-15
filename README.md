@@ -31,6 +31,16 @@ final class UserTable extends AbstractTable
     {
         $actions->edit('crud_edit')->delete('crud_delete')->bulk('archive', 'Archive', 'crud_bulk_archive');
     }
+
+    protected function configureDefaultSorting(TableSorting $sorting): void
+    {
+        $sorting->desc('createdAt')->asc('name');
+    }
+
+    protected function capabilities(): TableCapabilitiesDTO
+    {
+        return new TableCapabilitiesDTO(rowSelection: true, bulkActions: true, export: true);
+    }
 }
 ```
 
