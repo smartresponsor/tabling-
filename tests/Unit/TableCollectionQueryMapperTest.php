@@ -90,6 +90,24 @@ final class TableCollectionQueryMapperTest extends TestCase
         ], $this->table());
     }
 
+    public function testIgnoresMalformedProviderFilterAndSorterContainersWithoutWarnings(): void
+    {
+        $table = $this->table();
+
+        $antDesignQuery = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => 'invalid',
+            'sorter' => 123,
+        ], $table);
+        $primeReactQuery = (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => 'invalid',
+        ], $table);
+
+        self::assertSame([], $antDesignQuery->filters);
+        self::assertSame('createdAt', $antDesignQuery->sorts[0]->field);
+        self::assertSame([], $primeReactQuery->filters);
+        self::assertSame('createdAt', $primeReactQuery->sorts[0]->field);
+    }
+
     public function testMapsPrimeReactLazyStateAndUsesDefaultSorts(): void
     {
         $table = $this->table();

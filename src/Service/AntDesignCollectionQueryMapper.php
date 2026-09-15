@@ -21,7 +21,8 @@ final readonly class AntDesignCollectionQueryMapper
         $search = $this->search($payload);
 
         $filters = [];
-        foreach (($payload['filters'] ?? []) as $field => $value) {
+        $filterPayload = is_array($payload['filters'] ?? null) ? $payload['filters'] : [];
+        foreach ($filterPayload as $field => $value) {
             if (!is_string($field) || null === $value) {
                 continue;
             }
@@ -34,7 +35,8 @@ final readonly class AntDesignCollectionQueryMapper
         }
 
         $sorts = [];
-        foreach (($payload['sorter'] ?? []) as $field => $direction) {
+        $sortPayload = is_array($payload['sorter'] ?? null) ? $payload['sorter'] : [];
+        foreach ($sortPayload as $field => $direction) {
             if (!is_string($field) || !is_string($direction)) {
                 continue;
             }

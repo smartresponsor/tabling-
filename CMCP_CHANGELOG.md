@@ -135,3 +135,10 @@
 - The provider-operator safety contract is documented in README. Follow-up coverage closure added a minimal-table regression that exercises every optional `AbstractTable` default hook; final `composer quality` is green with 19/19 tests and 112 assertions, PHPStan, PHP-CS-Fixer, and production-manifest validation. Fresh Canon040 evidence is lines 97.19% (416/428), methods 85.24% (52/61), branches 85.52% (319/373), all above threshold. Root `composer validate --strict --check-lock` and `composer audit` are also green with no advisories.
 - No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
 
+### Malformed provider payload hardening
+
+- RC-critical follow-up: Ant Design and PrimeReact request adapters now normalize non-array `filters` containers to an empty filter set; Ant Design also normalizes a non-array `sorter` container. This prevents PHP `foreach` warnings at the dynamic provider boundary while preserving Collectioning-owned validation and table default sorting.
+- Added regression coverage proving malformed provider containers are ignored safely and canonical default sorts still apply.
+- Verification is green: `composer quality` passes with 20/20 tests and 116 assertions, branch-coverage execution, PHPStan, PHP-CS-Fixer, and production-manifest validation; changed-PHP lint passes for all three changed PHP files.
+- No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
+

@@ -22,7 +22,8 @@ final readonly class PrimeReactCollectionQueryMapper
         $search = isset($payload['globalFilter']) && is_scalar($payload['globalFilter']) ? (string) $payload['globalFilter'] : null;
 
         $filters = [];
-        foreach (($payload['filters'] ?? []) as $field => $definition) {
+        $filterPayload = is_array($payload['filters'] ?? null) ? $payload['filters'] : [];
+        foreach ($filterPayload as $field => $definition) {
             if (!is_string($field)) {
                 continue;
             }
