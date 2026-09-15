@@ -7,6 +7,7 @@ namespace App\Tabling\Tests\Unit;
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\Builder\TableActions;
 use App\Tabling\Builder\TableColumns;
+use App\Tabling\Builder\TableFacets;
 use App\Tabling\Builder\TableFilters;
 use App\Tabling\Builder\TableSorting;
 use App\Tabling\DTO\TableCapabilitiesDTO;
@@ -80,6 +81,11 @@ final class AbstractTableTest extends TestCase
                     ], 'Status', 'Any status');
             }
 
+            protected function configureFacets(TableFacets $facets): void
+            {
+                $facets->terms('status', 'Status', 10, includeMissing: true);
+            }
+
             protected function configureDefaultSorting(TableSorting $sorting): void
             {
                 $sorting->desc('createdAt')->asc('name');
@@ -103,6 +109,7 @@ final class AbstractTableTest extends TestCase
         self::assertCount(2, $definition->actions);
         self::assertCount(1, $definition->bulkActions);
         self::assertCount(2, $definition->filters);
+        self::assertCount(1, $definition->facets);
         self::assertSame('Name', $definition->columns[0]->label);
         self::assertSame('archive', $definition->bulkActions[0]->name);
         self::assertSame('createdAt', $definition->defaultSorts[0]->field);
@@ -113,6 +120,9 @@ final class AbstractTableTest extends TestCase
 
         self::assertSame('q', $ant['filters'][0]['nameEntity']);
         self::assertSame('archive', $ant['bulkActions'][0]['operation']);
+        self::assertSame('status', $ant['facets'][0]['field']);
+        self::assertSame(10, $ant['facets'][0]['limit']);
+        self::assertTrue($ant['facets'][0]['includeMissing']);
         self::assertSame(['field' => 'createdAt', 'direction' => 'desc'], $ant['defaultSorts'][0]);
         self::assertTrue($ant['capabilities']['rowSelection']);
         self::assertTrue($ant['capabilities']['export']);

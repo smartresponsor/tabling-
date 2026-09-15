@@ -16,6 +16,7 @@ final readonly class TableDefinitionDTO
      * @param list<TableFilterDTO>    $filters
      * @param list<TableActionDTO>    $bulkActions
      * @param list<CollectionSortDTO> $defaultSorts
+     * @param list<TableFacetDTO>     $facets
      */
     public function __construct(
         public string $name,
@@ -27,6 +28,7 @@ final readonly class TableDefinitionDTO
         public array $bulkActions = [],
         public array $defaultSorts = [],
         public ?TableCapabilitiesDTO $capabilities = null,
+        public array $facets = [],
     ) {
     }
 }

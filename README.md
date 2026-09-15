@@ -32,6 +32,11 @@ final class UserTable extends AbstractTable
         $actions->edit('crud_edit')->delete('crud_delete')->bulk('archive', 'Archive', 'crud_bulk_archive');
     }
 
+    protected function configureFacets(TableFacets $facets): void
+    {
+        $facets->terms('status')->terms('region', limit: 10, includeMissing: true);
+    }
+
     protected function configureDefaultSorting(TableSorting $sorting): void
     {
         $sorting->desc('createdAt')->asc('name');
@@ -57,3 +62,9 @@ Provider-specific request grammar therefore stops at Tabling; canonical search, 
 `TableViewDTO` captures provider-neutral saved view state: column visibility/order/width/pinning, search text, Collectioning filters/sorts, page size and metadata. `TableViewNormalizer` revalidates saved state against the current table/Collectioning policies so stale or unauthorized fields cannot be replayed after a schema or permission change. `TableViewStoreInterface` is the persistence boundary; hosts may back it with Doctrine, Redis or another store without making Tabling own user storage.
 
 `AntDesignTableViewMapper` and `PrimeReactTableViewMapper` translate one normalized view into each provider's native state shape, preserving a single backend representation across both UI ecosystems.
+
+## Faceted navigation
+
+Tables may declare facet dimensions through `TableFacets`. Tabling owns only the declaration and provider metadata; bucket computation remains a Collectioning concern. `TableFacetService` converts declared `TableFacetDTO` values into Collectioning `CollectionFacetDTO` requests and delegates them to `CollectionFacetProcessorInterface`.
+
+This keeps facet counts consistent with the same search and filter policy used for collection queries. Ant Design Pro and PrimeReact receive the same provider-neutral facet declarations, while Collectioning decides which fields are facetable and executes aggregation.

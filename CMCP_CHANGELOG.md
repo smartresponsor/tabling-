@@ -142,3 +142,13 @@
 - Verification is green: `composer quality` passes with 20/20 tests and 116 assertions, branch-coverage execution, PHPStan, PHP-CS-Fixer, and production-manifest validation; changed-PHP lint passes for all three changed PHP files.
 - No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
 
+### Facet declaration and execution continuation
+
+- Collectioning now exposes provider-neutral facet aggregation through `CollectionFacetProcessorInterface` and policy-owned `facetable` fields; that lower-level execution contract was implemented and merged before Tabling integration.
+- Added `TableFacetDTO` plus fluent `TableFacets` declarations and the `AbstractTable::configureFacets()` hook. `TableDefinitionDTO` carries facets as a trailing backward-compatible field.
+- Added matching Ant Design Pro and PrimeReact facet metadata so both UI providers consume the same facet declarations.
+- Added `TableFacetService` as the thin bridge from declared table facets to Collectioning `CollectionFacetDTO` execution. Tabling does not contain grouping SQL/DQL, bucket counting, or aggregation policy.
+- Added regression coverage for PHP-first declaration compilation, provider parity, Collectioning request translation, returned bucket propagation, and the zero-facet short circuit.
+- Final `composer quality` is green: PHPUnit 22/22 with 135 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, and production-manifest validation passes. Coverage: lines 97.25% (461/474), methods 85.50% (59/69), branches 85.31% (337/395).
+- No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
+
