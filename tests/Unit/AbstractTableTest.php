@@ -16,6 +16,32 @@ use PHPUnit\Framework\TestCase;
 
 final class AbstractTableTest extends TestCase
 {
+    public function testUsesSafeEmptyDefaultsForOptionalTableConfiguration(): void
+    {
+        $table = new class extends AbstractTable {
+            protected function name(): string
+            {
+                return 'minimal';
+            }
+
+            protected function collection(): CollectionDefinitionDTO
+            {
+                return new CollectionDefinitionDTO(\stdClass::class, []);
+            }
+        };
+
+        $definition = $table->definition();
+
+        self::assertSame('minimal', $definition->name);
+        self::assertSame([], $definition->columns);
+        self::assertSame([], $definition->actions);
+        self::assertSame([], $definition->filters);
+        self::assertSame([], $definition->bulkActions);
+        self::assertSame([], $definition->defaultSorts);
+        self::assertSame([], $definition->meta);
+        self::assertFalse($definition->capabilities?->rowSelection);
+    }
+
     public function testCompilesPhpDeclarationIntoProviderNeutralDefinition(): void
     {
         $table = new class extends AbstractTable {
