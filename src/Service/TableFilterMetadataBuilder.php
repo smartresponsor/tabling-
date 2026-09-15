@@ -12,18 +12,24 @@ final readonly class TableFilterMetadataBuilder
     public function build(string $resourceLabel): array
     {
         return array_map(
-            static fn (TableFilterDTO $filter): array => [
-                'nameEntity' => $filter->name,
-                'label' => $filter->label,
-                'type' => $filter->type,
-                'value' => null,
-                'placeholder' => $filter->placeholder,
-                'options' => $filter->options,
-            ],
+            fn (TableFilterDTO $filter): array => $this->metadata($filter),
             [
                 new TableFilterDTO('q', 'Search', 'text', 'Search '.$resourceLabel),
                 new TableFilterDTO('status', 'Status', 'select', 'Any status'),
             ],
         );
+    }
+
+    /** @return array<string, mixed> */
+    public function metadata(TableFilterDTO $filter): array
+    {
+        return [
+            'nameEntity' => $filter->name,
+            'label' => $filter->label,
+            'type' => $filter->type,
+            'value' => null,
+            'placeholder' => $filter->placeholder,
+            'options' => $filter->options,
+        ];
     }
 }

@@ -84,3 +84,13 @@
 - Code Memory graph planning resolved the repo-local project `D-PhpstormProjects-www-Tabling`; the repository does not declare `memory:scope:resolve`, and no graph mutation surface is available in the current execution toolset, so no graph update is claimed.
 - The pre-existing untracked `.gating/` contains a materialized Gating runtime/autoload bridge, but the current safe Console MCP capability set has no arbitrary PHP runner for `.gating/bin/gating`; executable Gating CLI completion is therefore not claimed. Textual Canonization mapping and all repository-owned gates above remain factual.
 - During lock refresh the local `Collectioning` `dev-master` reference advanced while this run was active; the final lock was refreshed against the then-current local `dev-master` and root Composer validation remained green.
+
+## 2026-09-15 — PHP-first table declaration continuation
+
+- Re-fetched Collectioning, Tabling, and Cruding and reviewed the post-RC journals before continuing. Collectioning now owns typed filters, cursor pagination, diagnostics, metrics, provider-neutral query planning, and canonical stable sorts; Cruding has completed Collectioning/Tabling delegation plus substantial RC coverage/package hardening; Tabling RC package contracts remain green.
+- Selected the next product-facing gap from the original table architecture goal: a concise PHP declaration layer. Prior Tabling APIs exposed DTOs and provider mappers but did not yet provide the `AbstractTable`-style developer ergonomics intended for application authors.
+- Added `AbstractTable` plus fluent `TableColumns`, `TableActions`, and `TableFilters` declaration builders. The compiler produces the existing provider-neutral `TableDefinitionDTO`; no Cruding dependency, query execution, React implementation, or provider-specific runtime was introduced.
+- Extended `TableDefinitionDTO` with trailing structured `filters` and `bulkActions` fields to preserve existing positional constructor compatibility. Both Ant Design Pro and PrimeReact mappers now serialize those structures through canonical Tabling metadata builders.
+- Added end-to-end declaration coverage from an anonymous PHP table definition through Ant Design provider metadata, including row actions, bulk actions, filters, column typing and custom meta.
+- Verification is green: PHPUnit 9/9 with 56 assertions, PHPStan level 8 with zero errors, PHP-CS-Fixer with zero pending fixes, and the composite `composer quality` gate passes including branch coverage and production-manifest validation.
+- Fresh coverage remains above Canon040 thresholds: lines 97.10% (168/173), methods 80.00% (32/40), branches 85.13% (63/74).
