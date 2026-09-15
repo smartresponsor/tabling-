@@ -8,6 +8,7 @@ use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\DTO\TableActionDTO;
 use App\Tabling\DTO\TableColumnDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
+use App\Tabling\DTO\TableFilterDTO;
 use App\Tabling\Service\AntDesignTableProviderMapper;
 use App\Tabling\Service\PrimeReactTableProviderMapper;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,9 @@ final class TableProviderMapperTest extends TestCase
             new CollectionDefinitionDTO(\stdClass::class, []),
             [new TableColumnDTO('name', 'Name', 'text', true, true, true)],
             [new TableActionDTO('edit', 'Edit', 'crud_edit', ['id' => 42], 'EDIT')],
+            [],
+            [new TableFilterDTO('status', 'Status', 'select', 'Any status')],
+            [new TableActionDTO('archive', 'Archive', 'crud_bulk_archive', [], 'ARCHIVE', 'bulk')],
         );
 
         $ant = (new AntDesignTableProviderMapper())->map($definition);
@@ -37,6 +41,10 @@ final class TableProviderMapperTest extends TestCase
         self::assertSame('name', $prime['columns'][0]['field']);
         self::assertTrue($prime['columns'][0]['sortable']);
         self::assertSame($ant['actions'], $prime['actions']);
+        self::assertSame('status', $ant['filters'][0]['nameEntity']);
+        self::assertSame($ant['filters'], $prime['filters']);
+        self::assertSame('archive', $ant['bulkActions'][0]['operation']);
+        self::assertSame($ant['bulkActions'], $prime['bulkActions']);
         self::assertIsArray($prime['actions'][0]);
     }
 }

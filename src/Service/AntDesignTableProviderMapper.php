@@ -31,6 +31,14 @@ final readonly class AntDesignTableProviderMapper implements TableProviderMapper
                 fn ($action): array => (new TableActionMetadataBuilder())->build($action),
                 $definition->actions,
             ),
+            'bulkActions' => array_map(
+                fn ($action): array => (new TableActionMetadataBuilder())->build($action),
+                $definition->bulkActions,
+            ),
+            'filters' => array_map(
+                fn ($filter): array => (new TableFilterMetadataBuilder())->metadata($filter),
+                $definition->filters,
+            ),
             'meta' => $definition->meta,
         ];
     }
