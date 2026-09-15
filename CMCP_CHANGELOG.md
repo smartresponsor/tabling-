@@ -103,3 +103,11 @@
 - `TableDefinitionDTO` now carries trailing backward-compatible `defaultSorts` and optional `capabilities`; `AbstractTable` exposes `configureDefaultSorting()` and `capabilities()` hooks.
 - Ant Design Pro and PrimeReact metadata now expose the same provider-neutral default-sort and capability payloads, leaving provider-specific rendering/behavior downstream.
 - Final quality gate is green after canonical formatting: PHPUnit 9/9 with 62 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, production manifest valid. Coverage remains above Canon040 thresholds: lines 96.58% (198/205), methods 78.72% (37/47), branches 83.95% (68/81).
+
+### Server-side grid protocol continuation
+
+- Added provider-specific request adapters without leaking provider grammar into Collectioning. `AntDesignCollectionQueryMapper` translates ProTable-style `current`/`pageSize`, search, filters, sorter and projection fields; `PrimeReactCollectionQueryMapper` translates lazy DataTable-style `first`/`rows`, global filter, field filters and single/multi-sort metadata.
+- Added `TableCollectionQueryBuilder` as the shared validation bridge. It checks provider-derived filters, sorts and projected fields against the `CollectionDefinitionDTO` field policy, applies table default sorts when the provider supplies none, clamps page size to Collectioning policy, and emits `CollectionQueryDTO`.
+- Disallowed provider fields/operators are dropped before query execution. Provider-specific request syntax therefore terminates in Tabling while Collectioning remains the canonical owner of search/filter/sort/projection/pagination execution semantics.
+- Added parity/regression coverage for Ant Design and PrimeReact mapping, including default sort fallback, multi-sort override and rejected non-projectable/non-sortable fields.
+- Final `composer quality` is green: PHPUnit 12/12 with 80 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, production manifest valid. Coverage remains above Canon040 thresholds: lines 94.55% (295/312), methods 71.42% (40/56), branches 81.78% (229/280).
