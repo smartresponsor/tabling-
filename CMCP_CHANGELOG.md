@@ -94,3 +94,12 @@
 - Added end-to-end declaration coverage from an anonymous PHP table definition through Ant Design provider metadata, including row actions, bulk actions, filters, column typing and custom meta.
 - Verification is green: PHPUnit 9/9 with 56 assertions, PHPStan level 8 with zero errors, PHP-CS-Fixer with zero pending fixes, and the composite `composer quality` gate passes including branch coverage and production-manifest validation.
 - Fresh coverage remains above Canon040 thresholds: lines 97.10% (168/173), methods 80.00% (32/40), branches 85.13% (63/74).
+
+### Default ordering and capability continuation
+
+- Closed the remaining README/runtime gap for Tabling-owned default ordering and table capabilities.
+- Added `TableSorting`, which emits Collectioning `CollectionSortDTO` values rather than defining a duplicate sorting language in Tabling.
+- Added `TableCapabilitiesDTO` for requested provider-native features (`pagination`, global search, row/bulk selection, column visibility, export, virtual scrolling, inline edit). These flags are metadata only; Tabling does not implement provider UI behavior.
+- `TableDefinitionDTO` now carries trailing backward-compatible `defaultSorts` and optional `capabilities`; `AbstractTable` exposes `configureDefaultSorting()` and `capabilities()` hooks.
+- Ant Design Pro and PrimeReact metadata now expose the same provider-neutral default-sort and capability payloads, leaving provider-specific rendering/behavior downstream.
+- Final quality gate is green after canonical formatting: PHPUnit 9/9 with 62 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, production manifest valid. Coverage remains above Canon040 thresholds: lines 96.58% (198/205), methods 78.72% (37/47), branches 83.95% (68/81).

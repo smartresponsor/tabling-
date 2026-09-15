@@ -8,6 +8,8 @@ use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\Builder\TableActions;
 use App\Tabling\Builder\TableColumns;
 use App\Tabling\Builder\TableFilters;
+use App\Tabling\Builder\TableSorting;
+use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\Provider\AbstractTable;
 use App\Tabling\Service\AntDesignTableProviderMapper;
 use PHPUnit\Framework\TestCase;
@@ -52,6 +54,16 @@ final class AbstractTableTest extends TestCase
                     ], 'Status', 'Any status');
             }
 
+            protected function configureDefaultSorting(TableSorting $sorting): void
+            {
+                $sorting->desc('createdAt')->asc('name');
+            }
+
+            protected function capabilities(): TableCapabilitiesDTO
+            {
+                return new TableCapabilitiesDTO(rowSelection: true, bulkActions: true, export: true);
+            }
+
             protected function meta(): array
             {
                 return ['density' => 'compact'];
@@ -67,11 +79,17 @@ final class AbstractTableTest extends TestCase
         self::assertCount(2, $definition->filters);
         self::assertSame('Name', $definition->columns[0]->label);
         self::assertSame('archive', $definition->bulkActions[0]->name);
+        self::assertSame('createdAt', $definition->defaultSorts[0]->field);
+        self::assertSame('desc', $definition->defaultSorts[0]->direction);
+        self::assertTrue($definition->capabilities?->bulkActions);
 
         $ant = (new AntDesignTableProviderMapper())->map($definition);
 
         self::assertSame('q', $ant['filters'][0]['nameEntity']);
         self::assertSame('archive', $ant['bulkActions'][0]['operation']);
+        self::assertSame(['field' => 'createdAt', 'direction' => 'desc'], $ant['defaultSorts'][0]);
+        self::assertTrue($ant['capabilities']['rowSelection']);
+        self::assertTrue($ant['capabilities']['export']);
         self::assertSame('compact', $ant['meta']['density']);
     }
 }
