@@ -128,4 +128,7 @@
 - Collectioning field/operator policy remains authoritative: an `in` filter is emitted only when the table's `CollectionFieldPolicyDTO` allows it; unsupported operators remain rejected in `TableCollectionQueryBuilder`.
 - Added regression tests for Ant Design multi-value filters, PrimeReact `in`, and policy rejection of unauthorized `in` filters.
 - Growth remains separate: broader provider match-mode translation should wait until the corresponding Collectioning operator vocabulary is standardized.
+- Follow-up hardening rejects explicit unsupported PrimeReact `matchMode` values instead of silently reinterpreting them as equality, preventing provider semantic corruption while broader operator support remains post-RC.
+- The provider-operator safety contract is documented in README; `composer quality` is green with 18/18 tests and 103 assertions, branch-coverage execution, PHPStan, PHP-CS-Fixer, and production-manifest validation; changed PHP lint also passes.
 - No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
+
