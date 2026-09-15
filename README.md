@@ -51,3 +51,9 @@ final class UserTable extends AbstractTable
 Tabling also bridges provider-specific grid request state into Collectioning without teaching Collectioning about Ant Design or PrimeReact. `AntDesignCollectionQueryMapper` accepts ProTable-style `current`/`pageSize`, filters and sorter metadata; `PrimeReactCollectionQueryMapper` accepts lazy DataTable-style `first`/`rows`, filters and single/multi-sort metadata. Both delegate policy validation and query construction to `TableCollectionQueryBuilder`, which emits `CollectionQueryDTO` and rejects fields/operators not allowed by the table's `CollectionDefinitionDTO`.
 
 Provider-specific request grammar therefore stops at Tabling; canonical search, filter, sort, projection and pagination semantics remain owned by Collectioning.
+
+## Saved and personalized views
+
+`TableViewDTO` captures provider-neutral saved view state: column visibility/order/width/pinning, search text, Collectioning filters/sorts, page size and metadata. `TableViewNormalizer` revalidates saved state against the current table/Collectioning policies so stale or unauthorized fields cannot be replayed after a schema or permission change. `TableViewStoreInterface` is the persistence boundary; hosts may back it with Doctrine, Redis or another store without making Tabling own user storage.
+
+`AntDesignTableViewMapper` and `PrimeReactTableViewMapper` translate one normalized view into each provider's native state shape, preserving a single backend representation across both UI ecosystems.
