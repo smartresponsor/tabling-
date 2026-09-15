@@ -44,6 +44,13 @@ final readonly class AntDesignTableProviderMapper implements TableProviderMapper
                 static fn ($sort): array => ['field' => $sort->field, 'direction' => $sort->direction],
                 $definition->defaultSorts,
             ),
+            'facets' => array_map(static fn ($facet): array => [
+                'field' => $facet->field,
+                'label' => $facet->label,
+                'limit' => $facet->limit,
+                'includeMissing' => $facet->includeMissing,
+                'excludeOwnFilter' => $facet->excludeOwnFilter,
+            ], $definition->facets),
             'capabilities' => ($definition->capabilities ?? new TableCapabilitiesDTO())->toArray(),
             'meta' => $definition->meta,
         ];
