@@ -174,3 +174,18 @@
 - Final `composer quality` is green: PHPUnit 29/29 with 180 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, and production-manifest validation passes. Root Composer strict/check-lock and audit are green; changed-file PHP lint is green. Coverage: lines 96.22% (561/583), methods 78.65% (70/89), branches 84.29% (408/484).
 - No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
 
+### Fail-closed collection-policy hardening
+
+- Re-read the current Tabling source/test/package surface, the Objecting/Cruding/Viewing/Interfacing integration contour, Gating, and authoritative Canonization rules Canon001, Canon002, Canon022, and Canon045.
+- Market comparison against current TanStack Table and AG Grid server-side guidance reaffirmed that filtering, sorting, pagination, aggregation, selection, and export semantics must remain coherent across the full dataset rather than silently degrading to a broader request.
+- Canon mapping: current role-first `Builder`, `DTO`, `DependencyInjection`, `Provider`, `Service`, and `ServiceInterface` roots remain compliant with Canon001/002. Canon022 remains non-applicable because Tabling is a component package rather than a standalone Symfony application. Canon045 requires only the current Collectioning local path closure for this package; adding reverse Objecting/Cruding/Viewing/Interfacing dependencies would create false coupling.
+- Baseline `composer quality` was green before changes: PHPUnit 29/29 with 180 assertions, branch coverage, PHPStan level 8, PHP-CS-Fixer dry-run, and production Composer validation.
+- RC-critical defect: `TableCollectionQueryBuilder` silently dropped explicit provider filters, sorts, and projection fields that violated `CollectionDefinitionDTO` policy. A rejected filter could therefore broaden the effective query while appearing accepted to the caller.
+- Implementation now fails closed with `InvalidArgumentException` for explicit unknown/non-filterable filters, disallowed filter operators, unknown/non-sortable sorts, invalid sort directions, and non-projectable fields. Structurally malformed provider containers/items remain tolerant at the adapter boundary.
+- Added focused regressions for disallowed `in`, non-filterable fields, non-sortable fields, and non-projectable fields; positive Ant Design/PrimeReact mapping fixtures now contain only allowed request state.
+- README now states the explicit fail-closed contract.
+- Targeted verification after implementation: PHPUnit 32/32 with 187 assertions green.
+- Full acceptance before integration is green: `composer quality` passes with PHPUnit 32/32 and 187 assertions, branch coverage execution, PHPStan level 8, PHP-CS-Fixer dry-run, and production manifest validation; changed PHP lint passes; root Composer strict/check-lock validation passes; Composer audit reports no security advisories.
+- Executable Gating was inspected through the local `.gating/gate.ps1` consumer surface. The Console MCP named gate runner does not expose a matching allowed check for this repository (`gating` is not an allowed check name), and arbitrary execution from `.gating/` is outside the available safe runner contract, so a fresh Gating execution is not claimed. Textual Canonization mapping and repository-owned executable quality gates are factual and green.
+- Pre-integration Git review: four owned modified files only (`CMCP_CHANGELOG.md`, `README.md`, `src/Service/TableCollectionQueryBuilder.php`, `tests/Unit/TableCollectionQueryMapperTest.php`); branch `server-export-scope-pr` tracks `origin/server-export-scope-pr` and was 0 ahead / 0 behind before commit.
+
