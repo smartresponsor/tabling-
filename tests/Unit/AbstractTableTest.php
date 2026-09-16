@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tabling\Tests\Unit;
 
+use App\Collectioning\DTO\CollectionDataScopeDTO;
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\Builder\TableActions;
 use App\Tabling\Builder\TableAggregations;
@@ -12,6 +13,7 @@ use App\Tabling\Builder\TableFacets;
 use App\Tabling\Builder\TableFilters;
 use App\Tabling\Builder\TableSorting;
 use App\Tabling\DTO\TableCapabilitiesDTO;
+use App\Tabling\DTO\TableExportPolicyDTO;
 use App\Tabling\Provider\AbstractTable;
 use App\Tabling\Service\AntDesignTableProviderMapper;
 use PHPUnit\Framework\TestCase;
@@ -105,6 +107,16 @@ final class AbstractTableTest extends TestCase
                 return new TableCapabilitiesDTO(rowSelection: true, bulkActions: true, export: true);
             }
 
+            protected function exportPolicy(): TableExportPolicyDTO
+            {
+                return new TableExportPolicyDTO(
+                    formats: ['csv', 'json'],
+                    scopes: [CollectionDataScopeDTO::FILTERED, CollectionDataScopeDTO::SELECTED],
+                    defaultScope: CollectionDataScopeDTO::FILTERED,
+                    permission: 'EXPORT_USERS',
+                );
+            }
+
             protected function meta(): array
             {
                 return ['density' => 'compact'];
@@ -140,6 +152,10 @@ final class AbstractTableTest extends TestCase
         self::assertSame(['field' => 'createdAt', 'direction' => 'desc'], $ant['defaultSorts'][0]);
         self::assertTrue($ant['capabilities']['rowSelection']);
         self::assertTrue($ant['capabilities']['export']);
+        self::assertSame(['csv', 'json'], $ant['exportPolicy']['formats']);
+        self::assertSame(['filtered', 'selected'], $ant['exportPolicy']['scopes']);
+        self::assertSame('filtered', $ant['exportPolicy']['defaultScope']);
+        self::assertSame('EXPORT_USERS', $ant['exportPolicy']['permission']);
         self::assertSame('compact', $ant['meta']['density']);
     }
 }

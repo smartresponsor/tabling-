@@ -33,6 +33,7 @@ final readonly class TableDefinitionDTO
         public array $facets = [],
         public array $aggregations = [],
         public array $groupBy = [],
+        public ?TableExportPolicyDTO $exportPolicy = null,
     ) {
     }
 }

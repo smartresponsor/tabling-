@@ -163,3 +163,14 @@
 - Final `composer quality` is green: PHPUnit 24/24 with 154 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, and production-manifest validation passes. Root Composer strict/check-lock and audit are green; changed-file PHP lint is green. Coverage: lines 96.76% (508/525), methods 81.92% (68/83), branches 84.36% (356/422).
 - No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
 
+### Server-side export scope continuation
+
+- Collectioning's scoped-read contract and canonical `in` / `notIn` membership operators were implemented and merged first, keeping page traversal and selection filtering below Tabling.
+- Added `TableExportPolicyDTO` for allowed formats, allowed `currentPage` / `filtered` / `selected` scopes, default scope, and optional Symfony Security permission. Export still requires `TableCapabilitiesDTO::export`; policy metadata alone does not enable it.
+- Added `TableDataScopeResolver` to translate selected row keys into a canonical identifier `in` filter. The generic selected scope requires exactly one scalar identifier field with policy-approved membership filtering, validates dynamic selected-key shape, and rejects composite identifiers explicitly.
+- Added `TableExportService` to enforce backend export capability and Symfony Security permission, validate requested scope, and delegate incremental row retrieval to Collectioning `CollectionScopedReaderInterface`.
+- Added shared export-policy metadata for Ant Design Pro and PrimeReact. File serialization/streaming/download controllers remain outside Tabling; the service exposes scoped rows rather than inventing another export engine.
+- Added regression coverage for explicit/default scopes, permission denial, disabled export, selected identifier translation, invalid policy/default scope, composite identifier rejection, and provider metadata parity.
+- Final `composer quality` is green: PHPUnit 29/29 with 180 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, and production-manifest validation passes. Root Composer strict/check-lock and audit are green; changed-file PHP lint is green. Coverage: lines 96.22% (561/583), methods 78.65% (70/89), branches 84.29% (408/484).
+- No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
+

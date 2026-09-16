@@ -55,6 +55,16 @@ final class UserTable extends AbstractTable
     {
         return new TableCapabilitiesDTO(rowSelection: true, bulkActions: true, export: true);
     }
+
+    protected function exportPolicy(): ?TableExportPolicyDTO
+    {
+        return new TableExportPolicyDTO(
+            formats: ['csv'],
+            scopes: [CollectionDataScopeDTO::FILTERED, CollectionDataScopeDTO::SELECTED],
+            defaultScope: CollectionDataScopeDTO::FILTERED,
+            permission: 'EXPORT_USERS',
+        );
+    }
 }
 ```
 
@@ -83,3 +93,11 @@ This keeps facet counts consistent with the same search and filter policy used f
 `TableAggregations` declares table summaries such as `count`, `sum`, `avg`, `min`, and `max`, plus optional `groupBy()` dimensions. These declarations are provider-neutral metadata only. `TableAggregationService` translates them to Collectioning `CollectionAggregationDTO` requests and delegates execution to `CollectionAggregationProcessorInterface`.
 
 Ant Design Pro and PrimeReact therefore receive identical summary/grouping metadata, while Collectioning remains authoritative for field/function allowlists, search/filter semantics, grouping eligibility, execution limits, and truncation reporting. This supports footer totals and grouped summary rows without introducing a second aggregation engine inside Tabling.
+
+## Server-side export and data scopes
+
+`TableExportPolicyDTO` declares allowed export formats, allowed data scopes, a default scope, and an optional Symfony Security permission. Export remains disabled unless `TableCapabilitiesDTO::export` is enabled. Both provider mappers receive the same normalized policy metadata; that metadata is descriptive and is not a substitute for backend authorization.
+
+`TableExportService` enforces the table capability and permission, validates the requested scope, and delegates row retrieval to Collectioning's `CollectionScopedReaderInterface`. `currentPage` preserves the visible page query, `filtered` streams the complete filtered result in bounded pages, and `selected` translates selected row keys to a canonical identifier `in` filter through `TableDataScopeResolver`. The generic selected resolver currently requires exactly one scalar identifier field with policy-approved `in` filtering; composite identifiers fail explicitly rather than being exported incorrectly.
+
+Tabling deliberately does not serialize CSV/JSON files or own download controllers. File encoding, response streaming, storage, and delivery remain host/provider concerns built over the scoped row iterable, while Collectioning remains authoritative for search, filters, sorting, projection, and page traversal.

@@ -13,6 +13,7 @@ use App\Tabling\Builder\TableFilters;
 use App\Tabling\Builder\TableSorting;
 use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
+use App\Tabling\DTO\TableExportPolicyDTO;
 use App\Tabling\ServiceInterface\TableDefinitionProviderInterface;
 
 abstract class AbstractTable implements TableDefinitionProviderInterface
@@ -46,6 +47,7 @@ abstract class AbstractTable implements TableDefinitionProviderInterface
             $facets->all(),
             $aggregations->all(),
             $aggregations->groups(),
+            $this->exportPolicy(),
         );
     }
 
@@ -80,6 +82,11 @@ abstract class AbstractTable implements TableDefinitionProviderInterface
     protected function capabilities(): TableCapabilitiesDTO
     {
         return new TableCapabilitiesDTO();
+    }
+
+    protected function exportPolicy(): ?TableExportPolicyDTO
+    {
+        return null;
     }
 
     /** @return array<string, mixed> */

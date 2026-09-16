@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tabling\Tests\Unit;
 
+use App\Collectioning\DTO\CollectionDataScopeDTO;
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\DTO\TableActionDTO;
 use App\Tabling\DTO\TableAggregationDTO;
+use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\DTO\TableColumnDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
+use App\Tabling\DTO\TableExportPolicyDTO;
 use App\Tabling\DTO\TableFacetDTO;
 use App\Tabling\DTO\TableFilterDTO;
 use App\Tabling\Service\AntDesignTableProviderMapper;
@@ -27,9 +30,15 @@ final class TableProviderMapperTest extends TestCase
             [],
             [new TableFilterDTO('status', 'Status', 'select', 'Any status')],
             [new TableActionDTO('archive', 'Archive', 'crud_bulk_archive', [], 'ARCHIVE', 'bulk')],
+            capabilities: new TableCapabilitiesDTO(export: true),
             facets: [new TableFacetDTO('status', 'Status', 15, true)],
             aggregations: [new TableAggregationDTO('rows', 'Rows', 'count')],
             groupBy: ['status'],
+            exportPolicy: new TableExportPolicyDTO(
+                formats: ['csv'],
+                scopes: [CollectionDataScopeDTO::CURRENT_PAGE, CollectionDataScopeDTO::FILTERED],
+                defaultScope: CollectionDataScopeDTO::CURRENT_PAGE,
+            ),
         );
 
         $ant = (new AntDesignTableProviderMapper())->map($definition);
@@ -58,6 +67,10 @@ final class TableProviderMapperTest extends TestCase
         self::assertSame($ant['aggregations'], $prime['aggregations']);
         self::assertSame(['status'], $ant['groupBy']);
         self::assertSame($ant['groupBy'], $prime['groupBy']);
+        self::assertSame(['csv'], $ant['exportPolicy']['formats']);
+        self::assertSame(['currentPage', 'filtered'], $ant['exportPolicy']['scopes']);
+        self::assertSame('currentPage', $ant['exportPolicy']['defaultScope']);
+        self::assertSame($ant['exportPolicy'], $prime['exportPolicy']);
         self::assertIsArray($prime['actions'][0]);
     }
 }
