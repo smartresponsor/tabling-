@@ -58,6 +58,7 @@ final readonly class PrimeReactTableProviderMapper implements TableProviderMappe
                 'field' => $aggregation->field,
             ], $definition->aggregations),
             'groupBy' => $definition->groupBy,
+            'exportPolicy' => (new TableExportPolicyMetadataBuilder())->metadata($definition),
             'capabilities' => ($definition->capabilities ?? new TableCapabilitiesDTO())->toArray(),
             'meta' => $definition->meta,
         ];
