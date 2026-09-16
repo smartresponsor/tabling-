@@ -22,9 +22,9 @@ final class TableCollectionQueryMapperTest extends TestCase
             'current' => 3,
             'pageSize' => 50,
             'q' => '  Alice  ',
-            'filters' => ['status' => 'active', 'secret' => 'ignored'],
-            'sorter' => ['name' => 'ascend', 'secret' => 'descend'],
-            'fields' => ['name', 'status', 'secret'],
+            'filters' => ['status' => 'active'],
+            'sorter' => ['name' => 'ascend'],
+            'fields' => ['name', 'status'],
         ], $table);
 
         self::assertSame(3, $query->page->number);
@@ -68,11 +68,12 @@ final class TableCollectionQueryMapperTest extends TestCase
 
     public function testRejectsProviderMultiValueFilterWhenCollectionPolicyDoesNotAllowInOperator(): void
     {
-        $query = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Collection field "name" does not allow filter operator "in".');
+
+        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => ['name' => ['alice', 'bob']],
         ], $this->table());
-
-        self::assertSame([], $query->filters);
     }
 
     public function testRejectsUnsupportedExplicitPrimeReactMatchModeInsteadOfReinterpretingIt(): void
@@ -117,7 +118,6 @@ final class TableCollectionQueryMapperTest extends TestCase
             'globalFilter' => 'bob',
             'filters' => [
                 'status' => ['value' => 'pending'],
-                'secret' => ['value' => 'ignored'],
             ],
         ], $table);
 
@@ -144,12 +144,42 @@ final class TableCollectionQueryMapperTest extends TestCase
         self::assertSame('desc', $query->sorts[1]->direction);
     }
 
+    public function testRejectsExplicitNonFilterableFieldInsteadOfBroadeningQuery(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Collection field "secret" is not filterable.');
+
+        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'filters' => ['secret' => 'ignored'],
+        ], $this->table());
+    }
+
+    public function testRejectsExplicitNonProjectableField(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Collection field "secret" is not projectable.');
+
+        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'fields' => ['name', 'secret'],
+        ], $this->table());
+    }
+
+    public function testRejectsExplicitNonSortableField(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Collection field "status" is not sortable.');
+
+        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+            'sorter' => ['status' => 'ascend'],
+        ], $this->table());
+    }
+
     private function table(): TableDefinitionDTO
     {
         return new TableDefinitionDTO(
             'users',
             new CollectionDefinitionDTO(\stdClass::class, [
-                new CollectionFieldPolicyDTO('name', searchable: true, sortable: true),
+                new CollectionFieldPolicyDTO('name', searchable: true, filterable: true, sortable: true, filterOperators: ['eq']),
                 new CollectionFieldPolicyDTO('status', filterable: true, filterOperators: ['eq', 'in']),
                 new CollectionFieldPolicyDTO('createdAt', sortable: true),
                 new CollectionFieldPolicyDTO('secret', projectable: false),
