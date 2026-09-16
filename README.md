@@ -72,7 +72,7 @@ final class UserTable extends AbstractTable
 
 ## Server-side grid protocol
 
-Tabling also bridges provider-specific grid request state into Collectioning without teaching Collectioning about Ant Design or PrimeReact. `AntDesignCollectionQueryMapper` accepts ProTable-style `current`/`pageSize`, filters and sorter metadata; `PrimeReactCollectionQueryMapper` accepts lazy DataTable-style `first`/`rows`, filters and single/multi-sort metadata. Both delegate policy validation and query construction to `TableCollectionQueryBuilder`, which emits `CollectionQueryDTO` and rejects fields/operators not allowed by the table's `CollectionDefinitionDTO`.
+Tabling also bridges provider-specific grid request state into Collectioning without teaching Collectioning about Ant Design or PrimeReact. `AntDesignCollectionQueryMapper` accepts ProTable-style `current`/`pageSize`, filters and sorter metadata; `PrimeReactCollectionQueryMapper` accepts lazy DataTable-style `first`/`rows`, filters and single/multi-sort metadata. Both delegate policy validation and query construction to `TableCollectionQueryBuilder`, which emits `CollectionQueryDTO` and fails closed with `InvalidArgumentException` when an explicit filter, sort, or projection violates the table's `CollectionDefinitionDTO` field policy.
 
 Provider-specific request grammar therefore stops at Tabling; canonical search, filter, sort, projection and pagination semantics remain owned by Collectioning. Provider operators are translated only when Tabling has an explicit canonical mapping: unsupported explicit PrimeReact match modes raise `InvalidArgumentException` rather than being silently dropped or reinterpreted as another Collectioning operator.
 

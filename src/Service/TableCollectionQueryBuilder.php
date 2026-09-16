@@ -41,8 +41,14 @@ final readonly class TableCollectionQueryBuilder
             }
             $field = $filter['field'];
             $operator = isset($filter['operator']) && is_string($filter['operator']) ? $filter['operator'] : 'eq';
-            if (!isset($policies[$field]) || !$policies[$field]->filterable || !in_array($operator, $policies[$field]->filterOperators, true)) {
-                continue;
+            if (!isset($policies[$field])) {
+                throw new \InvalidArgumentException(sprintf('Unknown collection filter field "%s".', $field));
+            }
+            if (!$policies[$field]->filterable) {
+                throw new \InvalidArgumentException(sprintf('Collection field "%s" is not filterable.', $field));
+            }
+            if (!in_array($operator, $policies[$field]->filterOperators, true)) {
+                throw new \InvalidArgumentException(sprintf('Collection field "%s" does not allow filter operator "%s".', $field, $operator));
             }
             $queryFilters[] = new CollectionFilterDTO($field, $operator, $filter['value']);
         }
@@ -55,17 +61,27 @@ final readonly class TableCollectionQueryBuilder
             }
             $field = $sort['field'];
             $direction = strtolower($sort['direction']);
-            if (!isset($policies[$field]) || !$policies[$field]->sortable || !in_array($direction, ['asc', 'desc'], true)) {
-                continue;
+            if (!isset($policies[$field])) {
+                throw new \InvalidArgumentException(sprintf('Unknown collection sort field "%s".', $field));
+            }
+            if (!$policies[$field]->sortable) {
+                throw new \InvalidArgumentException(sprintf('Collection field "%s" is not sortable.', $field));
+            }
+            if (!in_array($direction, ['asc', 'desc'], true)) {
+                throw new \InvalidArgumentException(sprintf('Unsupported collection sort direction "%s" for field "%s".', $direction, $field));
             }
             $querySorts[] = new CollectionSortDTO($field, $direction);
         }
 
         $queryFields = [];
         foreach ($fields as $field) {
-            if (is_string($field) && isset($policies[$field]) && $policies[$field]->projectable) {
-                $queryFields[] = $field;
+            if (!is_string($field)) {
+                continue;
             }
+            if (!isset($policies[$field]) || !$policies[$field]->projectable) {
+                throw new \InvalidArgumentException(sprintf('Collection field "%s" is not projectable.', $field));
+            }
+            $queryFields[] = $field;
         }
 
         $normalizedSearch = null === $search ? null : trim($search);
