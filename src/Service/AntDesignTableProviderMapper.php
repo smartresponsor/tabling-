@@ -51,6 +51,13 @@ final readonly class AntDesignTableProviderMapper implements TableProviderMapper
                 'includeMissing' => $facet->includeMissing,
                 'excludeOwnFilter' => $facet->excludeOwnFilter,
             ], $definition->facets),
+            'aggregations' => array_map(static fn ($aggregation): array => [
+                'name' => $aggregation->name,
+                'label' => $aggregation->label,
+                'function' => $aggregation->function,
+                'field' => $aggregation->field,
+            ], $definition->aggregations),
+            'groupBy' => $definition->groupBy,
             'capabilities' => ($definition->capabilities ?? new TableCapabilitiesDTO())->toArray(),
             'meta' => $definition->meta,
         ];

@@ -6,6 +6,7 @@ namespace App\Tabling\Tests\Unit;
 
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\Builder\TableActions;
+use App\Tabling\Builder\TableAggregations;
 use App\Tabling\Builder\TableColumns;
 use App\Tabling\Builder\TableFacets;
 use App\Tabling\Builder\TableFilters;
@@ -86,6 +87,14 @@ final class AbstractTableTest extends TestCase
                 $facets->terms('status', 'Status', 10, includeMissing: true);
             }
 
+            protected function configureAggregations(TableAggregations $aggregations): void
+            {
+                $aggregations
+                    ->count('rows', 'Rows')
+                    ->sum('totalAmount', 'amount', 'Total amount')
+                    ->groupBy('status');
+            }
+
             protected function configureDefaultSorting(TableSorting $sorting): void
             {
                 $sorting->desc('createdAt')->asc('name');
@@ -110,6 +119,8 @@ final class AbstractTableTest extends TestCase
         self::assertCount(1, $definition->bulkActions);
         self::assertCount(2, $definition->filters);
         self::assertCount(1, $definition->facets);
+        self::assertCount(2, $definition->aggregations);
+        self::assertSame(['status'], $definition->groupBy);
         self::assertSame('Name', $definition->columns[0]->label);
         self::assertSame('archive', $definition->bulkActions[0]->name);
         self::assertSame('createdAt', $definition->defaultSorts[0]->field);
@@ -123,6 +134,9 @@ final class AbstractTableTest extends TestCase
         self::assertSame('status', $ant['facets'][0]['field']);
         self::assertSame(10, $ant['facets'][0]['limit']);
         self::assertTrue($ant['facets'][0]['includeMissing']);
+        self::assertSame('rows', $ant['aggregations'][0]['name']);
+        self::assertSame('sum', $ant['aggregations'][1]['function']);
+        self::assertSame(['status'], $ant['groupBy']);
         self::assertSame(['field' => 'createdAt', 'direction' => 'desc'], $ant['defaultSorts'][0]);
         self::assertTrue($ant['capabilities']['rowSelection']);
         self::assertTrue($ant['capabilities']['export']);

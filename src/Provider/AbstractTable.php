@@ -6,6 +6,7 @@ namespace App\Tabling\Provider;
 
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\Builder\TableActions;
+use App\Tabling\Builder\TableAggregations;
 use App\Tabling\Builder\TableColumns;
 use App\Tabling\Builder\TableFacets;
 use App\Tabling\Builder\TableFilters;
@@ -22,12 +23,14 @@ abstract class AbstractTable implements TableDefinitionProviderInterface
         $actions = new TableActions();
         $filters = new TableFilters();
         $facets = new TableFacets();
+        $aggregations = new TableAggregations();
         $sorting = new TableSorting();
 
         $this->configureColumns($columns);
         $this->configureActions($actions);
         $this->configureFilters($filters);
         $this->configureFacets($facets);
+        $this->configureAggregations($aggregations);
         $this->configureDefaultSorting($sorting);
 
         return new TableDefinitionDTO(
@@ -41,6 +44,8 @@ abstract class AbstractTable implements TableDefinitionProviderInterface
             $sorting->all(),
             $this->capabilities(),
             $facets->all(),
+            $aggregations->all(),
+            $aggregations->groups(),
         );
     }
 
@@ -61,6 +66,10 @@ abstract class AbstractTable implements TableDefinitionProviderInterface
     }
 
     protected function configureFacets(TableFacets $facets): void
+    {
+    }
+
+    protected function configureAggregations(TableAggregations $aggregations): void
     {
     }
 

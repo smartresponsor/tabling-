@@ -37,6 +37,15 @@ final class UserTable extends AbstractTable
         $facets->terms('status')->terms('region', limit: 10, includeMissing: true);
     }
 
+    protected function configureAggregations(TableAggregations $aggregations): void
+    {
+        $aggregations
+            ->count('rows', 'Rows')
+            ->sum('totalAmount', 'amount', 'Total amount')
+            ->avg('averageAmount', 'amount', 'Average amount')
+            ->groupBy('status');
+    }
+
     protected function configureDefaultSorting(TableSorting $sorting): void
     {
         $sorting->desc('createdAt')->asc('name');
@@ -68,3 +77,9 @@ Provider-specific request grammar therefore stops at Tabling; canonical search, 
 Tables may declare facet dimensions through `TableFacets`. Tabling owns only the declaration and provider metadata; bucket computation remains a Collectioning concern. `TableFacetService` converts declared `TableFacetDTO` values into Collectioning `CollectionFacetDTO` requests and delegates them to `CollectionFacetProcessorInterface`.
 
 This keeps facet counts consistent with the same search and filter policy used for collection queries. Ant Design Pro and PrimeReact receive the same provider-neutral facet declarations, while Collectioning decides which fields are facetable and executes aggregation.
+
+## Summaries and grouping
+
+`TableAggregations` declares table summaries such as `count`, `sum`, `avg`, `min`, and `max`, plus optional `groupBy()` dimensions. These declarations are provider-neutral metadata only. `TableAggregationService` translates them to Collectioning `CollectionAggregationDTO` requests and delegates execution to `CollectionAggregationProcessorInterface`.
+
+Ant Design Pro and PrimeReact therefore receive identical summary/grouping metadata, while Collectioning remains authoritative for field/function allowlists, search/filter semantics, grouping eligibility, execution limits, and truncation reporting. This supports footer totals and grouped summary rows without introducing a second aggregation engine inside Tabling.

@@ -10,13 +10,15 @@ use App\Collectioning\DTO\CollectionSortDTO;
 final readonly class TableDefinitionDTO
 {
     /**
-     * @param list<TableColumnDTO>    $columns
-     * @param list<TableActionDTO>    $actions
-     * @param array<string, mixed>    $meta
-     * @param list<TableFilterDTO>    $filters
-     * @param list<TableActionDTO>    $bulkActions
-     * @param list<CollectionSortDTO> $defaultSorts
-     * @param list<TableFacetDTO>     $facets
+     * @param list<TableColumnDTO>      $columns
+     * @param list<TableActionDTO>      $actions
+     * @param array<string, mixed>      $meta
+     * @param list<TableFilterDTO>      $filters
+     * @param list<TableActionDTO>      $bulkActions
+     * @param list<CollectionSortDTO>   $defaultSorts
+     * @param list<TableFacetDTO>       $facets
+     * @param list<TableAggregationDTO> $aggregations
+     * @param list<string>              $groupBy
      */
     public function __construct(
         public string $name,
@@ -29,6 +31,8 @@ final readonly class TableDefinitionDTO
         public array $defaultSorts = [],
         public ?TableCapabilitiesDTO $capabilities = null,
         public array $facets = [],
+        public array $aggregations = [],
+        public array $groupBy = [],
     ) {
     }
 }
