@@ -152,3 +152,14 @@
 - Final `composer quality` is green: PHPUnit 22/22 with 135 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, and production-manifest validation passes. Coverage: lines 97.25% (461/474), methods 85.50% (59/69), branches 85.31% (337/395).
 - No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
 
+### Summary and grouping continuation
+
+- Collectioning's grouped/general aggregation contract was implemented and merged first, preserving execution ownership below Tabling.
+- Added `TableAggregationDTO` and fluent `TableAggregations` declarations for `count`, `sum`, `avg`, `min`, `max`, and deduplicated `groupBy()` dimensions.
+- `AbstractTable::configureAggregations()` compiles those declarations into trailing backward-compatible `TableDefinitionDTO::aggregations` and `groupBy` metadata.
+- Ant Design Pro and PrimeReact provider mappers expose identical aggregation/grouping metadata; neither provider adapter executes aggregation.
+- Added `TableAggregationService` as the thin bridge to Collectioning `CollectionAggregationProcessorInterface`, including a zero-aggregation short circuit.
+- Regression coverage verifies PHP-first declaration compilation, provider parity, Collectioning request translation, returned grouped summary propagation, and empty aggregation behavior.
+- Final `composer quality` is green: PHPUnit 24/24 with 154 assertions, PHPStan level 8 zero errors, PHP-CS-Fixer zero pending fixes, and production-manifest validation passes. Root Composer strict/check-lock and audit are green; changed-file PHP lint is green. Coverage: lines 96.76% (508/525), methods 81.92% (68/83), branches 84.36% (356/422).
+- No UI rendering/template/browser surface changed, so visual evidence is not applicable for this pass.
+

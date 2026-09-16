@@ -6,6 +6,7 @@ namespace App\Tabling\Tests\Unit;
 
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Tabling\DTO\TableActionDTO;
+use App\Tabling\DTO\TableAggregationDTO;
 use App\Tabling\DTO\TableColumnDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableFacetDTO;
@@ -27,6 +28,8 @@ final class TableProviderMapperTest extends TestCase
             [new TableFilterDTO('status', 'Status', 'select', 'Any status')],
             [new TableActionDTO('archive', 'Archive', 'crud_bulk_archive', [], 'ARCHIVE', 'bulk')],
             facets: [new TableFacetDTO('status', 'Status', 15, true)],
+            aggregations: [new TableAggregationDTO('rows', 'Rows', 'count')],
+            groupBy: ['status'],
         );
 
         $ant = (new AntDesignTableProviderMapper())->map($definition);
@@ -51,6 +54,10 @@ final class TableProviderMapperTest extends TestCase
         self::assertSame(15, $ant['facets'][0]['limit']);
         self::assertTrue($ant['facets'][0]['includeMissing']);
         self::assertSame($ant['facets'], $prime['facets']);
+        self::assertSame('rows', $ant['aggregations'][0]['name']);
+        self::assertSame($ant['aggregations'], $prime['aggregations']);
+        self::assertSame(['status'], $ant['groupBy']);
+        self::assertSame($ant['groupBy'], $prime['groupBy']);
         self::assertIsArray($prime['actions'][0]);
     }
 }
