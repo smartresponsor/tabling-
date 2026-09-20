@@ -11,7 +11,7 @@ final readonly class TableActionMetadataBuilder
     /** @return array<string, mixed> */
     public function build(TableActionDTO $action, ?string $href = null): array
     {
-        return [
+        $metadata = [
             'label' => $action->label,
             'href' => $href,
             'routeName' => $action->routeName,
@@ -23,5 +23,12 @@ final readonly class TableActionMetadataBuilder
             'visibility' => $action->enabled ? 'visible' : 'disabled',
             'permission' => $action->permission,
         ];
+
+        if ('bulk' === $action->scope) {
+            $metadata['allowedDataScopes'] = $action->allowedDataScopes;
+            $metadata['defaultDataScope'] = $action->defaultDataScope;
+        }
+
+        return $metadata;
     }
 }
