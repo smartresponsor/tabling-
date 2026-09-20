@@ -1,5 +1,13 @@
 # CMCP Execution Journal
 
+## 2026-09-19 — bulk mutation scope policy
+
+- Reconnaissance: verified clean local Tabling state, fetched origin, and read current action metadata, provider mappers, TableDataScopeResolver, export scope policy, and current tests. Collectioning remains the owner of currentPage / filtered / selected semantics; Tabling remains metadata-only for mutations.
+- Selected change: extend the existing TableActionDTO with trailing backward-compatible bulk data-scope policy instead of creating a parallel bulk-action hierarchy.
+- Bulk declarations can describe allowed Collectioning scopes and a default scope; provider metadata carries the same policy to Ant Design Pro and PrimeReact without execution callbacks or mutation services.
+- Safety: non-bulk actions reject data-scope policy, scope names are restricted to canonical CollectionDataScopeDTO values, and a default scope must be included in the allowed set.
+- Gates to run: PHPUnit, PHPStan level 8, PHP-CS-Fixer, Composer strict/check-lock validation, Composer audit, production manifest checks, and changed-file PHP lint.
+
 ## 2026-09-13 — repository implementation / RC hardening
 
 ### Iteration 1 — reconnaissance and baseline

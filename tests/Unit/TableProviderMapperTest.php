@@ -29,7 +29,18 @@ final class TableProviderMapperTest extends TestCase
             [new TableActionDTO('edit', 'Edit', 'crud_edit', ['id' => 42], 'EDIT')],
             [],
             [new TableFilterDTO('status', 'Status', 'select', 'Any status')],
-            [new TableActionDTO('archive', 'Archive', 'crud_bulk_archive', [], 'ARCHIVE', 'bulk')],
+            [new TableActionDTO(
+                'archive',
+                'Archive',
+                'crud_bulk_archive',
+                [],
+                'ARCHIVE',
+                'bulk',
+                false,
+                true,
+                [CollectionDataScopeDTO::SELECTED, CollectionDataScopeDTO::FILTERED],
+                CollectionDataScopeDTO::SELECTED,
+            )],
             capabilities: new TableCapabilitiesDTO(export: true),
             facets: [new TableFacetDTO('status', 'Status', 15, true)],
             aggregations: [new TableAggregationDTO('rows', 'Rows', 'count')],
@@ -58,6 +69,8 @@ final class TableProviderMapperTest extends TestCase
         self::assertSame('status', $ant['filters'][0]['nameEntity']);
         self::assertSame($ant['filters'], $prime['filters']);
         self::assertSame('archive', $ant['bulkActions'][0]['operation']);
+        self::assertSame(['selected', 'filtered'], $ant['bulkActions'][0]['allowedDataScopes']);
+        self::assertSame('selected', $ant['bulkActions'][0]['defaultDataScope']);
         self::assertSame($ant['bulkActions'], $prime['bulkActions']);
         self::assertSame('status', $ant['facets'][0]['field']);
         self::assertSame(15, $ant['facets'][0]['limit']);

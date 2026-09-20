@@ -72,7 +72,14 @@ final class AbstractTableTest extends TestCase
                 $actions
                     ->edit('crud_edit', ['id' => 42])
                     ->delete('crud_delete', ['id' => 42])
-                    ->bulk('archive', 'Archive', 'crud_bulk_archive', permission: 'ARCHIVE');
+                    ->bulk(
+                        'archive',
+                        'Archive',
+                        'crud_bulk_archive',
+                        permission: 'ARCHIVE',
+                        allowedDataScopes: [CollectionDataScopeDTO::SELECTED, CollectionDataScopeDTO::FILTERED],
+                        defaultDataScope: CollectionDataScopeDTO::SELECTED,
+                    );
             }
 
             protected function configureFilters(TableFilters $filters): void
@@ -135,6 +142,11 @@ final class AbstractTableTest extends TestCase
         self::assertSame(['status'], $definition->groupBy);
         self::assertSame('Name', $definition->columns[0]->label);
         self::assertSame('archive', $definition->bulkActions[0]->name);
+        self::assertSame(
+            [CollectionDataScopeDTO::SELECTED, CollectionDataScopeDTO::FILTERED],
+            $definition->bulkActions[0]->allowedDataScopes,
+        );
+        self::assertSame(CollectionDataScopeDTO::SELECTED, $definition->bulkActions[0]->defaultDataScope);
         self::assertSame('createdAt', $definition->defaultSorts[0]->field);
         self::assertSame('desc', $definition->defaultSorts[0]->direction);
         self::assertTrue($definition->capabilities?->bulkActions);
@@ -143,6 +155,8 @@ final class AbstractTableTest extends TestCase
 
         self::assertSame('q', $ant['filters'][0]['nameEntity']);
         self::assertSame('archive', $ant['bulkActions'][0]['operation']);
+        self::assertSame(['selected', 'filtered'], $ant['bulkActions'][0]['allowedDataScopes']);
+        self::assertSame('selected', $ant['bulkActions'][0]['defaultDataScope']);
         self::assertSame('status', $ant['facets'][0]['field']);
         self::assertSame(10, $ant['facets'][0]['limit']);
         self::assertTrue($ant['facets'][0]['includeMissing']);
