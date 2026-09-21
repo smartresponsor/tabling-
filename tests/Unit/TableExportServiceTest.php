@@ -110,7 +110,7 @@ final class TableExportServiceTest extends TestCase
         $resolver = new TableDataScopeResolver();
         $composite = new TableDefinitionDTO(
             'composite',
-            new CollectionDefinitionDTO(\stdClass::class, [], identifierFields: ['tenantId', 'id']),
+            new CollectionDefinitionDTO(\stdClass::class, [], identifierFields: ['vendorId', 'id']),
             [],
         );
 
