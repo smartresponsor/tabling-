@@ -7,11 +7,17 @@
   "prefer-stable": true,
   "require": {
     "collectioning/collection": "dev-master",
+    "cruding/crud": "dev-master",
+    "easycorp/easyadmin-bundle": "^5.5",
+    "failing/failure": "dev-master",
+    "interfacing/interface": "dev-master",
+    "objecting/object": "dev-master",
     "php": "^8.4",
     "symfony/dependency-injection": "^8.1",
     "symfony/framework-bundle": "^8.1",
     "symfony/http-kernel": "^8.1",
-    "symfony/security-bundle": "^8.1"
+    "symfony/security-bundle": "^8.1",
+    "viewing/view": "dev-master"
   },
   "autoload": {
     "psr-4": {

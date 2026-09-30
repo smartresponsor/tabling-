@@ -7,11 +7,17 @@
   "prefer-stable": true,
   "require": {
     "collectioning/collection": "dev-master",
+    "cruding/crud": "dev-master",
+    "easycorp/easyadmin-bundle": "^5.5",
+    "failing/failure": "dev-master",
+    "interfacing/interface": "dev-master",
+    "objecting/object": "dev-master",
     "php": "^8.4",
     "symfony/dependency-injection": "^8.1",
     "symfony/framework-bundle": "^8.1",
     "symfony/http-kernel": "^8.1",
-    "symfony/security-bundle": "^8.1"
+    "symfony/security-bundle": "^8.1",
+    "viewing/view": "dev-master"
   },
   "repositories": [
     {
@@ -21,6 +27,56 @@
         "symlink": true,
         "versions": {
           "collectioning/collection": "dev-master"
+        }
+      }
+    },
+    {
+      "type": "path",
+      "url": "../Cruding",
+      "options": {
+        "symlink": true,
+        "versions": {
+          "cruding/crud": "dev-master"
+        }
+      }
+    },
+    {
+      "type": "path",
+      "url": "../Failing",
+      "options": {
+        "symlink": true,
+        "versions": {
+          "failing/failure": "dev-master"
+        }
+      }
+    },
+    {
+      "type": "path",
+      "url": "../Interfacing",
+      "options": {
+        "symlink": true,
+        "versions": {
+          "interfacing/interface": "dev-master"
+        }
+      }
+    },
+    {
+      "type": "path",
+      "url": "../Objecting",
+      "options": {
+        "symlink": true,
+        "versions": {
+          "objecting/object": "dev-master"
+        }
+      }
+    },
+    {
+      "type": "path",
+      "url": "../Viewing",
+      "options": {
+        "symlink": true,
+        "versions": {
+          "viewing/view": "dev-master"
         }
       }
     },
