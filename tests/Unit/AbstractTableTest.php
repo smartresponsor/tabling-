@@ -14,15 +14,15 @@ use App\Tabling\Builder\TableFilters;
 use App\Tabling\Builder\TableSorting;
 use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\DTO\TableExportPolicyDTO;
-use App\Tabling\Provider\AbstractTable;
-use App\Tabling\Service\AntDesignTableProviderMapper;
+use App\Tabling\Provider\TableProvider;
+use App\Tabling\Service\TableAntDesignProviderMapper;
 use PHPUnit\Framework\TestCase;
 
 final class AbstractTableTest extends TestCase
 {
     public function testUsesSafeEmptyDefaultsForOptionalTableConfiguration(): void
     {
-        $table = new class extends AbstractTable {
+        $table = new class extends TableProvider {
             protected function name(): string
             {
                 return 'minimal';
@@ -48,7 +48,7 @@ final class AbstractTableTest extends TestCase
 
     public function testCompilesPhpDeclarationIntoProviderNeutralDefinition(): void
     {
-        $table = new class extends AbstractTable {
+        $table = new class extends TableProvider {
             protected function name(): string
             {
                 return 'users';
@@ -151,7 +151,7 @@ final class AbstractTableTest extends TestCase
         self::assertSame('desc', $definition->defaultSorts[0]->direction);
         self::assertTrue($definition->capabilities?->bulkActions);
 
-        $ant = (new AntDesignTableProviderMapper())->map($definition);
+        $ant = (new TableAntDesignProviderMapper())->map($definition);
 
         self::assertSame('q', $ant['filters'][0]['nameEntity']);
         self::assertSame('archive', $ant['bulkActions'][0]['operation']);

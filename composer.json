@@ -2,7 +2,7 @@
   "name": "tabling/table",
   "description": "Symfony backend table-definition primitive for provider-neutral columns, filters, actions and security.",
   "type": "symfony-bundle",
-  "license": "proprietary",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
@@ -23,6 +23,16 @@
           "collectioning/collection": "dev-master"
         }
       }
+    },
+    {
+      "type": "path",
+      "url": "../Gating",
+      "options": {
+        "symlink": true,
+        "versions": {
+          "gating/gate": "dev-master"
+        }
+      }
     }
   ],
   "autoload": {
@@ -38,7 +48,11 @@
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.95",
     "phpstan/phpstan": "^2.2",
-    "phpunit/phpunit": "^13.3"
+    "phpunit/phpunit": "^13.3",
+    "gating/gate": "dev-master",
+    "symfony/browser-kit": "^8.1",
+    "symfony/css-selector": "^8.1",
+    "symfony/panther": "^2.4"
   },
   "scripts": {
     "test": "phpunit tests",
@@ -55,7 +69,9 @@
       "@test:coverage",
       "@phpstan",
       "@cs:check",
-      "@validate:prod"
-    ]
+      "@validate:prod",
+      "@gate"
+    ],
+    "gate": "@php vendor/bin/gating check --target=."
   }
 }

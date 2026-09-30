@@ -6,7 +6,7 @@ namespace App\Tabling\Service;
 
 use App\Tabling\DTO\TableViewDTO;
 
-final readonly class AntDesignTableViewMapper
+final readonly class TableAntDesignViewMapper
 {
     /** @return array<string, mixed> */
     public function map(TableViewDTO $view): array

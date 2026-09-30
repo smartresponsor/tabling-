@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tabling\Tests\Unit;
 
 use App\Tabling\DTO\TableActionDTO;
-use App\Tabling\Service\TableActionVisibilityResolver;
+use App\Tabling\Resolver\TableActionVisibilityResolver;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 

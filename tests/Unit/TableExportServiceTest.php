@@ -13,7 +13,7 @@ use App\Collectioning\ServiceInterface\CollectionScopedReaderInterface;
 use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableExportPolicyDTO;
-use App\Tabling\Service\TableDataScopeResolver;
+use App\Tabling\Resolver\TableDataScopeResolver;
 use App\Tabling\Service\TableExportService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

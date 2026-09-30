@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tabling\Service;
+namespace App\Tabling\Normalizer;
 
 use App\Collectioning\DTO\CollectionFilterDTO;
 use App\Collectioning\DTO\CollectionSortDTO;

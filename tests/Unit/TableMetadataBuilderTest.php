@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tabling\Tests\Unit;
 
-use App\Tabling\Service\TableColumnMetadataBuilder;
-use App\Tabling\Service\TableFilterMetadataBuilder;
+use App\Tabling\Builder\TableColumnMetadataBuilder;
+use App\Tabling\Builder\TableFilterMetadataBuilder;
 use PHPUnit\Framework\TestCase;
 
 final class TableMetadataBuilderTest extends TestCase

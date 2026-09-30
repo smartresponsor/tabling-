@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tabling\Service;
+namespace App\Tabling\Builder;
 
 final readonly class TableColumnMetadataBuilder
 {

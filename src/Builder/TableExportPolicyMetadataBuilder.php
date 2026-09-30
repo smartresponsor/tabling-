@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tabling\Service;
+namespace App\Tabling\Builder;
 
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableExportPolicyDTO;

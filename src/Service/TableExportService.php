@@ -8,6 +8,7 @@ use App\Collectioning\DTO\CollectionQueryDTO;
 use App\Collectioning\ServiceInterface\CollectionScopedReaderInterface;
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableExportPolicyDTO;
+use App\Tabling\Resolver\TableDataScopeResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 

@@ -12,9 +12,9 @@ use App\Tabling\DTO\TableColumnDTO;
 use App\Tabling\DTO\TableColumnStateDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableViewDTO;
-use App\Tabling\Service\AntDesignTableViewMapper;
-use App\Tabling\Service\PrimeReactTableViewMapper;
-use App\Tabling\Service\TableViewNormalizer;
+use App\Tabling\Normalizer\TableViewNormalizer;
+use App\Tabling\Service\TableAntDesignViewMapper;
+use App\Tabling\Service\TablePrimeReactViewMapper;
 use PHPUnit\Framework\TestCase;
 
 final class TableViewTest extends TestCase
@@ -68,8 +68,8 @@ final class TableViewTest extends TestCase
             50,
         ));
 
-        $ant = (new AntDesignTableViewMapper())->map($view);
-        $prime = (new PrimeReactTableViewMapper())->map($view);
+        $ant = (new TableAntDesignViewMapper())->map($view);
+        $prime = (new TablePrimeReactViewMapper())->map($view);
 
         self::assertFalse($ant['columnsState']['status']['show']);
         self::assertSame(240, $ant['columnsState']['name']['width']);
