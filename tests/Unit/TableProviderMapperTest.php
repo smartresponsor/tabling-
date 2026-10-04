@@ -14,8 +14,8 @@ use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableExportPolicyDTO;
 use App\Tabling\DTO\TableFacetDTO;
 use App\Tabling\DTO\TableFilterDTO;
-use App\Tabling\Service\AntDesignTableProviderMapper;
-use App\Tabling\Service\PrimeReactTableProviderMapper;
+use App\Tabling\Service\TableAntDesignProviderMapper;
+use App\Tabling\Service\TablePrimeReactProviderMapper;
 use PHPUnit\Framework\TestCase;
 
 final class TableProviderMapperTest extends TestCase
@@ -52,8 +52,8 @@ final class TableProviderMapperTest extends TestCase
             ),
         );
 
-        $ant = (new AntDesignTableProviderMapper())->map($definition);
-        $prime = (new PrimeReactTableProviderMapper())->map($definition);
+        $ant = (new TableAntDesignProviderMapper())->map($definition);
+        $prime = (new TablePrimeReactProviderMapper())->map($definition);
 
         self::assertSame('ant-design-pro', $ant['provider']);
         self::assertSame('name', $ant['columns'][0]['dataIndex']);

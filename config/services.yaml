@@ -3,5 +3,14 @@ services:
         autowire: true
         autoconfigure: true
 
+    App\Tabling\Builder\:
+        resource: '../src/Builder/'
+
+    App\Tabling\Normalizer\:
+        resource: '../src/Normalizer/'
+
+    App\Tabling\Resolver\:
+        resource: '../src/Resolver/'
+
     App\Tabling\Service\:
         resource: '../src/Service/'

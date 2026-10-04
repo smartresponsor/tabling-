@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tabling\Service;
+namespace App\Tabling\Resolver;
 
 use App\Tabling\DTO\TableActionDTO;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

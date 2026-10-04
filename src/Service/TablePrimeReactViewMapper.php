@@ -6,7 +6,7 @@ namespace App\Tabling\Service;
 
 use App\Tabling\DTO\TableViewDTO;
 
-final readonly class PrimeReactTableViewMapper
+final readonly class TablePrimeReactViewMapper
 {
     /** @return array<string, mixed> */
     public function map(TableViewDTO $view): array

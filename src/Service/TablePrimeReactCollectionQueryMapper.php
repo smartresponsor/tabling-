@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Tabling\Service;
 
 use App\Collectioning\DTO\CollectionQueryDTO;
+use App\Tabling\Builder\TableCollectionQueryBuilder;
 use App\Tabling\DTO\TableDefinitionDTO;
 
-final readonly class PrimeReactCollectionQueryMapper
+final readonly class TablePrimeReactCollectionQueryMapper
 {
     public function __construct(private TableCollectionQueryBuilder $builder)
     {

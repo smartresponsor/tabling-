@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tabling\Tests\Unit;
 
+use App\Tabling\Builder\TableActionMetadataBuilder;
 use App\Tabling\DTO\TableActionDTO;
-use App\Tabling\Service\TableActionMetadataBuilder;
 use PHPUnit\Framework\TestCase;
 
 final class TableActionMetadataBuilderTest extends TestCase

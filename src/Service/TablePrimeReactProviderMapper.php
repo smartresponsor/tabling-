@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tabling\Service;
 
+use App\Tabling\Builder\TableActionMetadataBuilder;
+use App\Tabling\Builder\TableExportPolicyMetadataBuilder;
+use App\Tabling\Builder\TableFilterMetadataBuilder;
 use App\Tabling\DTO\TableCapabilitiesDTO;
 use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\ServiceInterface\TableProviderMapperInterface;
 
-final readonly class AntDesignTableProviderMapper implements TableProviderMapperInterface
+final readonly class TablePrimeReactProviderMapper implements TableProviderMapperInterface
 {
     public function provider(): string
     {
-        return 'ant-design-pro';
+        return 'prime-react';
     }
 
     public function map(TableDefinitionDTO $definition): array
@@ -21,12 +24,12 @@ final readonly class AntDesignTableProviderMapper implements TableProviderMapper
             'provider' => $this->provider(),
             'name' => $definition->name,
             'columns' => array_map(static fn ($column): array => [
-                'dataIndex' => $column->field,
-                'title' => $column->label,
-                'valueType' => $column->type,
-                'sorter' => $column->sortable,
-                'hideInTable' => !$column->visible,
-                'search' => $column->filterable || $column->searchable,
+                'field' => $column->field,
+                'header' => $column->label,
+                'dataType' => $column->type,
+                'sortable' => $column->sortable,
+                'filter' => $column->filterable,
+                'hidden' => !$column->visible,
             ], $definition->columns),
             'actions' => array_map(
                 fn ($action): array => (new TableActionMetadataBuilder())->build($action),

@@ -16,7 +16,7 @@ use App\Tabling\DTO\TableDefinitionDTO;
 use App\Tabling\DTO\TableExportPolicyDTO;
 use App\Tabling\ServiceInterface\TableDefinitionProviderInterface;
 
-abstract class AbstractTable implements TableDefinitionProviderInterface
+abstract class TableProvider implements TableDefinitionProviderInterface
 {
     final public function definition(): TableDefinitionDTO
     {

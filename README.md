@@ -13,7 +13,7 @@ Provider mapper output is a serialization-ready metadata boundary. Table action 
 Applications may declare a table as a small Symfony-side class and let Tabling compile it into the provider-neutral definition consumed by Ant Design Pro Components or PrimeReact:
 
 ```php
-final class UserTable extends AbstractTable
+final class UserTable extends TableProvider
 {
     protected function name(): string { return 'users'; }
 
@@ -68,11 +68,11 @@ final class UserTable extends AbstractTable
 }
 ```
 
-`AbstractTable` owns declaration ergonomics only. Collection execution remains in Collectioning, route/mutation execution remains in Cruding or the host application, and provider mappers only translate the resulting metadata to the selected UI ecosystem.
+`TableProvider` owns declaration ergonomics only. Collection execution remains in Collectioning, route/mutation execution remains in Cruding or the host application, and provider mappers only translate the resulting metadata to the selected UI ecosystem.
 
 ## Server-side grid protocol
 
-Tabling also bridges provider-specific grid request state into Collectioning without teaching Collectioning about Ant Design or PrimeReact. `AntDesignCollectionQueryMapper` accepts ProTable-style `current`/`pageSize`, filters and sorter metadata; `PrimeReactCollectionQueryMapper` accepts lazy DataTable-style `first`/`rows`, filters and single/multi-sort metadata. Both delegate policy validation and query construction to `TableCollectionQueryBuilder`, which emits `CollectionQueryDTO` and fails closed with `InvalidArgumentException` when an explicit filter, sort, or projection violates the table's `CollectionDefinitionDTO` field policy.
+Tabling also bridges provider-specific grid request state into Collectioning without teaching Collectioning about Ant Design or PrimeReact. `TableAntDesignCollectionQueryMapper` accepts ProTable-style `current`/`pageSize`, filters and sorter metadata; `TablePrimeReactCollectionQueryMapper` accepts lazy DataTable-style `first`/`rows`, filters and single/multi-sort metadata. Both delegate policy validation and query construction to `TableCollectionQueryBuilder`, which emits `CollectionQueryDTO` and fails closed with `InvalidArgumentException` when an explicit filter, sort, or projection violates the table's `CollectionDefinitionDTO` field policy.
 
 Provider-specific request grammar therefore stops at Tabling; canonical search, filter, sort, projection and pagination semantics remain owned by Collectioning. Provider operators are translated only when Tabling has an explicit canonical mapping: unsupported explicit PrimeReact match modes raise `InvalidArgumentException` rather than being silently dropped or reinterpreted as another Collectioning operator.
 
@@ -80,7 +80,7 @@ Provider-specific request grammar therefore stops at Tabling; canonical search, 
 
 `TableViewDTO` captures provider-neutral saved view state: column visibility/order/width/pinning, search text, Collectioning filters/sorts, page size and metadata. `TableViewNormalizer` revalidates saved state against the current table/Collectioning policies so stale or unauthorized fields cannot be replayed after a schema or permission change. `TableViewStoreInterface` is the persistence boundary; hosts may back it with Doctrine, Redis or another store without making Tabling own user storage.
 
-`AntDesignTableViewMapper` and `PrimeReactTableViewMapper` translate one normalized view into each provider's native state shape, preserving a single backend representation across both UI ecosystems.
+`TableAntDesignViewMapper` and `TablePrimeReactViewMapper` translate one normalized view into each provider's native state shape, preserving a single backend representation across both UI ecosystems.
 
 ## Faceted navigation
 

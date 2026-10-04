@@ -7,10 +7,10 @@ namespace App\Tabling\Tests\Unit;
 use App\Collectioning\DTO\CollectionDefinitionDTO;
 use App\Collectioning\DTO\CollectionFieldPolicyDTO;
 use App\Collectioning\DTO\CollectionSortDTO;
+use App\Tabling\Builder\TableCollectionQueryBuilder;
 use App\Tabling\DTO\TableDefinitionDTO;
-use App\Tabling\Service\AntDesignCollectionQueryMapper;
-use App\Tabling\Service\PrimeReactCollectionQueryMapper;
-use App\Tabling\Service\TableCollectionQueryBuilder;
+use App\Tabling\Service\TableAntDesignCollectionQueryMapper;
+use App\Tabling\Service\TablePrimeReactCollectionQueryMapper;
 use PHPUnit\Framework\TestCase;
 
 final class TableCollectionQueryMapperTest extends TestCase
@@ -18,7 +18,7 @@ final class TableCollectionQueryMapperTest extends TestCase
     public function testMapsAntDesignServerStateIntoCollectionQuery(): void
     {
         $table = $this->table();
-        $query = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $query = (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'current' => 3,
             'pageSize' => 50,
             'q' => '  Alice  ',
@@ -39,7 +39,7 @@ final class TableCollectionQueryMapperTest extends TestCase
 
     public function testMapsAntDesignMultiValueFilterWhenCollectionPolicyAllowsInOperator(): void
     {
-        $query = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $query = (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => ['status' => ['active', 'pending']],
         ], $this->table());
 
@@ -51,7 +51,7 @@ final class TableCollectionQueryMapperTest extends TestCase
 
     public function testMapsPrimeReactInMatchModeWithoutDroppingArrayValue(): void
     {
-        $query = (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $query = (new TablePrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => [
                 'status' => [
                     'value' => ['active', 'pending'],
@@ -71,7 +71,7 @@ final class TableCollectionQueryMapperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Collection field "name" does not allow filter operator "in".');
 
-        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => ['name' => ['alice', 'bob']],
         ], $this->table());
     }
@@ -81,7 +81,7 @@ final class TableCollectionQueryMapperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unsupported PrimeReact match mode "contains" for field "status".');
 
-        (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        (new TablePrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => [
                 'status' => [
                     'value' => 'active',
@@ -95,11 +95,11 @@ final class TableCollectionQueryMapperTest extends TestCase
     {
         $table = $this->table();
 
-        $antDesignQuery = (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $antDesignQuery = (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => 'invalid',
             'sorter' => 123,
         ], $table);
-        $primeReactQuery = (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $primeReactQuery = (new TablePrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => 'invalid',
         ], $table);
 
@@ -112,7 +112,7 @@ final class TableCollectionQueryMapperTest extends TestCase
     public function testMapsPrimeReactLazyStateAndUsesDefaultSorts(): void
     {
         $table = $this->table();
-        $query = (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $query = (new TablePrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'first' => 40,
             'rows' => 20,
             'globalFilter' => 'bob',
@@ -131,7 +131,7 @@ final class TableCollectionQueryMapperTest extends TestCase
 
     public function testPrimeReactExplicitMultiSortOverridesDefaults(): void
     {
-        $query = (new PrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        $query = (new TablePrimeReactCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'multiSortMeta' => [
                 ['field' => 'name', 'order' => 1],
                 ['field' => 'createdAt', 'order' => -1],
@@ -149,7 +149,7 @@ final class TableCollectionQueryMapperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Collection field "secret" is not filterable.');
 
-        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'filters' => ['secret' => 'ignored'],
         ], $this->table());
     }
@@ -159,7 +159,7 @@ final class TableCollectionQueryMapperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Collection field "secret" is not projectable.');
 
-        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'fields' => ['name', 'secret'],
         ], $this->table());
     }
@@ -169,7 +169,7 @@ final class TableCollectionQueryMapperTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Collection field "status" is not sortable.');
 
-        (new AntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
+        (new TableAntDesignCollectionQueryMapper(new TableCollectionQueryBuilder()))->map([
             'sorter' => ['status' => 'ascend'],
         ], $this->table());
     }
